@@ -27,9 +27,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 type HeroSectionProps = {
   className?: string;
+  platformRef?: React.RefObject<HTMLElement | null>;
 };
 
-export default function HeroSection({ className = "" }: HeroSectionProps) {
+export default function HeroSection({
+  className = "",
+  platformRef,
+}: HeroSectionProps) {
   const heroRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HeroCanvasHandle>(null);
   const overlayRef = useRef<HTMLElement>(null);
@@ -60,10 +64,9 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
       "[data-hero-vignette]",
     );
 
-    const platform = document.querySelector<HTMLElement>(
-      "[data-platform-section]",
-    );
+    const platform = platformRef?.current ?? null;
     const canvasWrap = hero.querySelector<HTMLElement>("[data-hero-canvas-wrap]");
+    const portalFill = hero.querySelector<HTMLElement>("[data-hero-portal-fill]");
 
     if (prefersReducedMotion()) {
       canvas.setFrame(0);
@@ -80,11 +83,11 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         onFrame: (frame) => canvas.setFrame(frame),
       },
       { intro, mid, exit, vignette },
-      { platform, canvas: canvasWrap, overlay },
+      { hero, platform, canvas: canvasWrap, overlay, portalFill },
     );
 
     ScrollTrigger.refresh();
-  }, []);
+  }, [platformRef]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
@@ -172,11 +175,17 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
       className={`relative h-svh w-full overflow-hidden ${className}`}
       aria-label="Cinematic introduction"
     >
-      <div data-hero-canvas-wrap className="absolute inset-0">
+      <div data-hero-canvas-wrap className="absolute inset-0 z-10">
         <HeroCanvas ref={canvasRef} maxDpr={maxDpr} />
       </div>
 
-      <HeroOverlay ref={overlayRef} className="absolute inset-0" />
+      <div
+        data-hero-portal-fill
+        className="pointer-events-none invisible absolute inset-0 z-25 bg-[#f8f9fa]"
+        aria-hidden
+      />
+
+      <HeroOverlay ref={overlayRef} className="absolute inset-0 z-20" />
 
       {!isReady && !loadError && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#030712]/90 backdrop-blur-sm">

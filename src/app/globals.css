@@ -35,3 +35,9 @@ body {
   background: rgba(56, 189, 248, 0.35);
   color: #fff;
 }
+
+/* Keep pinned hero above [data-page-flow] while scrolling */
+.pin-spacer {
+  position: relative;
+  z-index: 20;
+}
