@@ -9,6 +9,7 @@ import {
   getSegmentFrameUrls,
   HERO_SEGMENTS,
 } from "@/lib/hero/segments.config";
+import { HERO_SCROLL_LAYOUT_EVENT } from "@/lib/gsap/revealOnScroll";
 import {
   flattenSegmentImages,
   preloadHeroSequences,
@@ -19,6 +20,11 @@ import {
   prefersReducedMotion,
   type HeroScrollController,
 } from "@/lib/hero/heroScrollTrigger";
+import {
+  forceUnlockPageScroll,
+  lockPageScroll,
+  unlockPageScroll,
+} from "@/lib/hero/scrollLock";
 
 import HeroCanvas, { type HeroCanvasHandle } from "./HeroCanvas";
 import HeroOverlay from "./HeroOverlay";
@@ -87,7 +93,20 @@ export default function HeroSection({
     );
 
     ScrollTrigger.refresh();
+    window.dispatchEvent(new CustomEvent(HERO_SCROLL_LAYOUT_EVENT));
   }, [platformRef]);
+
+  useEffect(() => {
+    if (!isReady && !loadError) {
+      lockPageScroll();
+      return () => unlockPageScroll();
+    }
+    unlockPageScroll();
+  }, [isReady, loadError]);
+
+  useEffect(() => {
+    return () => forceUnlockPageScroll();
+  }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 768px)");
@@ -135,6 +154,7 @@ export default function HeroSection({
       imagesLoadedRef.current = false;
       scrollControllerRef.current?.kill();
       scrollControllerRef.current = null;
+      forceUnlockPageScroll();
     };
   }, []);
 

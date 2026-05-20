@@ -23,6 +23,13 @@ html {
   scroll-behavior: auto;
 }
 
+html.hero-scroll-locked,
+html.hero-scroll-locked body {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -36,8 +43,34 @@ body {
   color: #fff;
 }
 
+@keyframes partners-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.partners-marquee-track {
+  animation: partners-marquee 42s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partners-marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    row-gap: 2rem;
+  }
+}
+
 /* Keep pinned hero above [data-page-flow] while scrolling */
-.pin-spacer {
+/* .pin-spacer {
   position: relative;
   z-index: 20;
-}
+} */

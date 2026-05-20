@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 
 import PlatformSectionContent from "./PlatformSectionContent";
+import { PLATFORM_SECTION_BACKGROUND } from "./platform/platform.config";
 
 const PlatformSection = forwardRef<
   HTMLElement,
@@ -10,11 +11,13 @@ const PlatformSection = forwardRef<
     <section
       ref={ref}
       id="platform"
-      className={`relative min-h-svh w-full origin-center bg-[#f8f9fa] pointer-events-none ${className}`.trim()}
+      className={`relative min-h-svh w-full origin-center pointer-events-none ${className}`.trim()}
+      style={{ backgroundColor: PLATFORM_SECTION_BACKGROUND }}
+      aria-labelledby="platform-heading"
       aria-hidden
       data-platform-section
     >
-      <PlatformSectionContent className="px-6 py-28 md:px-10" />
+      <PlatformSectionContent />
     </section>
   );
 });

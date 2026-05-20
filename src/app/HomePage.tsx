@@ -3,7 +3,11 @@
 import { useRef } from "react";
 
 import HeroSection from "@/components/hero/HeroSection";
+import PartnersCarousel from "@/components/sections/PartnersCarousel";
 import PlatformSection from "@/components/sections/PlatformSection";
+import ContactSection from "@/components/sections/ContactSection";
+import OurPeopleSection from "@/components/sections/OurPeopleSection";
+import VisionSection from "@/components/sections/VisionSection";
 
 export default function HomePage() {
   const platformRef = useRef<HTMLElement>(null);
@@ -19,7 +23,6 @@ export default function HomePage() {
           platformRef={platformRef}
           className="relative z-20 min-h-svh w-full isolate"
         />
-
         <PlatformSection
           ref={platformRef}
           className="relative z-0 min-h-svh w-full origin-center"
@@ -28,10 +31,10 @@ export default function HomePage() {
 
       {/* Rest of the site scrolls normally after the hero handoff */}
       <div data-page-continuation className="relative z-10">
-        {/* Add more sections below as components */}
-        <div className="relative z-0 min-h-svh w-full origin-center bg-red-200">
-          <h1>testing new section component</h1>
-        </div>
+        <PartnersCarousel />
+        <VisionSection />
+        <OurPeopleSection />
+        <ContactSection />
       </div>
     </main>
   );

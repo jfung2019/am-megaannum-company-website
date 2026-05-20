@@ -2,7 +2,7 @@
  * Portal: sequence → white hold → platform reveal behind fading hero.
  */
 
-/** Matches PlatformSection background */
+/** Portal white hold / crossfade surface (not the platform section bg) */
 export const PLATFORM_SURFACE_COLOR = "#f8f9fa";
 
 /** Scale of platform when it first appears after the white hold */
