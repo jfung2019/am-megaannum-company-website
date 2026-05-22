@@ -172,7 +172,7 @@ export default function OurPeopleSection({
           </h2>
           <div
             data-people-line
-            className="mt-10 h-px w-28 origin-left bg-gradient-to-r from-[#ec721a] to-[#ec721a]/20"
+            className="mt-10 h-px w-28 origin-left bg-linear-to-r from-[#ec721a] to-[#ec721a]/20"
             aria-hidden
           />
         </header>
@@ -188,7 +188,7 @@ export default function OurPeopleSection({
               className="group cursor-default opacity-0 will-change-transform"
               style={{ zIndex: members.length - index }}
             >
-              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900">
+              <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
                 <Image
                   src={member.image}
                   alt={member.imageAlt}
@@ -199,7 +199,7 @@ export default function OurPeopleSection({
                 />
                 <div
                   data-person-overlay
-                  className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-55"
+                  className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
                   aria-hidden
                 />
                 <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">

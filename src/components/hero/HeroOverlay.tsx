@@ -107,7 +107,7 @@ const HeroOverlay = forwardRef<HTMLElement, HeroOverlayProps>(
 
         <div
           data-hero-vignette
-          className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/50 via-transparent to-slate-950/70 opacity-50"
+          className="pointer-events-none absolute inset-0 bg-linear-to-b from-slate-950/50 via-transparent to-slate-950/70 opacity-50"
           aria-hidden
         />
       </header>
