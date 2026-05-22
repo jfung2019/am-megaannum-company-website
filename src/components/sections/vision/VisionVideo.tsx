@@ -51,7 +51,7 @@ export default function VisionVideo({
             className="absolute inset-0 flex items-center justify-center transition hover:bg-black/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
             aria-label={`Play video: ${title}`}
           >
-            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm transition hover:scale-105 md:h-[4.5rem] md:w-[4.5rem]">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm transition hover:scale-105 md:h-18 md:w-18">
               <svg
                 viewBox="0 0 24 24"
                 className="ml-1 h-7 w-7 fill-white md:h-8 md:w-8"

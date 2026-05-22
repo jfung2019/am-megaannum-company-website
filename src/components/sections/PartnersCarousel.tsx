@@ -21,11 +21,11 @@ export default function PartnersCarousel({
 
       <div className="relative mt-10 md:mt-12">
         <div
-          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#f8f9fa] to-transparent md:w-28"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-linear-to-r from-[#f8f9fa] to-transparent md:w-28"
           aria-hidden
         />
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#f8f9fa] to-transparent md:w-28"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-linear-to-l from-[#f8f9fa] to-transparent md:w-28"
           aria-hidden
         />
 
