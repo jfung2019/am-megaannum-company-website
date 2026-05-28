@@ -1,5 +1,5 @@
 /** YouTube embed — replace with your own finance / brand film */
-export const VISION_YOUTUBE_VIDEO_ID = "ZCFkWDdmXG8";
+export const VISION_YOUTUBE_VIDEO_ID = "GR1byj5jPug";
 
 export const VISION_CONTENT = {
   headingLine1: "Build Something",
