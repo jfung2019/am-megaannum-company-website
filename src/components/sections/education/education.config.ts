@@ -17,14 +17,14 @@ export const EDUCATION_CONTENT = {
       title: "Platform overview",
       description:
         "A walkthrough of dashboards, signals, and how institutions onboard to Megaannum.",
-      youtubeUrl: "https://www.youtube.com/watch?v=ZCFkWDdmXG8",
+      youtubeUrl: "https://www.youtube.com/watch?v=Efxp-JENmuk",
     },
     {
       id: "liquidity-signals",
       title: "Reading liquidity signals",
       description:
         "How predictive models surface stress before settlement windows tighten.",
-      youtubeUrl: "https://www.youtube.com/watch?v=LXb3EKWsInQ",
+      youtubeUrl: "https://www.youtube.com/watch?v=ZCFkWDdmXG8",
     },
     {
       id: "treasury-workflows",
