@@ -3,10 +3,6 @@ export const CONTACT_CONTENT = {
   heading: "Let's build the future of treasury intelligence.",
   subhead:
     "Speak with our team about institutional onboarding, platform access, or partnership opportunities.",
-  logo: {
-    src: "/images/Megaannum_Logo.ai.png",
-    alt: "Megaannum — scales and key shield logo",
-  },
   details: [
     { label: "General inquiries", value: "hello@megaannum.com", href: "mailto:hello@megaannum.com" },
     { label: "Institutional sales", value: "institutions@megaannum.com", href: "mailto:institutions@megaannum.com" },

@@ -11,6 +11,7 @@ export default function PartnersCarousel({
 }: PartnersCarouselProps) {
   return (
     <section
+      id="partners"
       className={`relative overflow-hidden bg-[#f8f9fa] py-14 md:py-20 ${className}`.trim()}
       aria-label="Trusted partners"
     >

@@ -8,12 +8,20 @@ type RevealOnScrollOptions = {
   threshold?: number;
   /** Shrink the viewport box — negative bottom margin delays until further in view */
   rootMargin?: string;
+  /** Viewport ratio the trigger top must pass before the manual sync can play */
+  syncStartRatio?: number;
+  /** Viewport ratio the trigger bottom must remain beyond before the manual sync can play */
+  syncEndRatio?: number;
 };
 
-function isInView(trigger: Element): boolean {
+function isInView(
+  trigger: Element,
+  syncStartRatio: number,
+  syncEndRatio: number,
+): boolean {
   const rect = trigger.getBoundingClientRect();
   const vh = window.innerHeight;
-  return rect.top < vh * 0.92 && rect.bottom > vh * 0.08;
+  return rect.top < vh * syncStartRatio && rect.bottom > vh * syncEndRatio;
 }
 
 /**
@@ -25,7 +33,12 @@ export function revealOnScroll(
   timeline: gsap.core.Timeline,
   options: RevealOnScrollOptions = {},
 ): () => void {
-  const { threshold = 0.12, rootMargin = "0px 0px -5% 0px" } = options;
+  const {
+    threshold = 0.12,
+    rootMargin = "0px 0px -5% 0px",
+    syncStartRatio = 0.92,
+    syncEndRatio = 0.08,
+  } = options;
   let played = false;
 
   const play = () => {
@@ -35,7 +48,7 @@ export function revealOnScroll(
   };
 
   const sync = () => {
-    if (isInView(trigger)) play();
+    if (isInView(trigger, syncStartRatio, syncEndRatio)) play();
   };
 
   const observer = new IntersectionObserver(

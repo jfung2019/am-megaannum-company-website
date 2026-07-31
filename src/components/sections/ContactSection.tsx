@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
@@ -19,14 +18,12 @@ type ContactSectionProps = {
 
 export default function ContactSection({ className = "" }: ContactSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  const logoColRef = useRef<HTMLDivElement>(null);
-  const formColRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const logoCol = logoColRef.current;
-    const formCol = formColRef.current;
-    if (!section || !logoCol || !formCol) return;
+    const content = contentRef.current;
+    if (!section || !content) return;
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -36,26 +33,28 @@ export default function ContactSection({ className = "" }: ContactSectionProps) 
     let revealTl: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
-      const targets = [logoCol, formCol];
       if (reducedMotion) {
-        gsap.set(targets, { clearProps: "all", opacity: 1, y: 0 });
+        gsap.set(content, { clearProps: "all", opacity: 1, y: 0 });
         return;
       }
 
-      gsap.set(targets, { y: 48, opacity: 0 });
+      gsap.set(content, { y: 48, opacity: 0 });
 
       revealTl = gsap.timeline({ paused: true });
-      revealTl.to(targets, {
+      revealTl.to(content, {
         y: 0,
         opacity: 1,
         duration: 1.05,
-        stagger: 0.15,
         ease: "power3.out",
       });
     }, section);
 
     if (revealTl) {
-      disconnectReveal = revealOnScroll(section, revealTl);
+      disconnectReveal = revealOnScroll(section, revealTl, {
+        threshold: 0.2,
+        rootMargin: "0px 0px -28% 0px",
+        syncStartRatio: 0.68,
+      });
     }
 
     return () => {
@@ -64,7 +63,7 @@ export default function ContactSection({ className = "" }: ContactSectionProps) 
     };
   }, []);
 
-  const { eyebrow, heading, subhead, logo, details, form } = CONTACT_CONTENT;
+  const { eyebrow, heading, subhead, details, form } = CONTACT_CONTENT;
 
   return (
     <section
@@ -74,37 +73,18 @@ export default function ContactSection({ className = "" }: ContactSectionProps) 
       aria-labelledby="contact-heading"
     >
       <div className="w-full px-6 py-24 md:px-10 md:py-28 lg:px-14 lg:py-32 xl:px-20">
-        <div className="grid items-start gap-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-20 xl:gap-24">
-          <div
-            ref={logoColRef}
-            className="flex flex-col items-center opacity-0 lg:items-start"
-          >
-            <div className="relative w-full max-w-[280px] sm:max-w-[320px]">
-              <Image
-                src={logo.src}
-                alt={logo.alt}
-                width={640}
-                height={720}
-                className="h-auto w-full object-contain"
-                priority={false}
-              />
-            </div>
-            <p className="mt-8 max-w-xs text-center text-sm leading-relaxed text-black/55 lg:text-left">
-              Institutional-grade AI for liquidity, risk, and governed execution.
-            </p>
-          </div>
-
-          <div ref={formColRef} className="opacity-0">
+        <div className="mx-auto max-w-2xl">
+          <div ref={contentRef} className="text-center opacity-0">
             <p className="font-mono text-[11px] font-medium tracking-[0.22em] text-black/45 uppercase">
               {eyebrow}
             </p>
             <h2
               id="contact-heading"
-              className={`${playfair.className} mt-5 max-w-xl text-3xl leading-[1.1] font-medium tracking-tight md:text-4xl lg:text-[2.75rem]`}
+              className={`${playfair.className} mx-auto mt-5 max-w-xl text-3xl leading-[1.1] font-medium tracking-tight md:text-4xl lg:text-[2.75rem]`}
             >
               {heading}
             </h2>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-black/60 md:text-[1.05rem] md:leading-8">
+            <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-black/60 md:text-[1.05rem] md:leading-8">
               {subhead}
             </p>
 
@@ -122,14 +102,16 @@ export default function ContactSection({ className = "" }: ContactSectionProps) 
                       {item.value}
                     </a>
                   ) : (
-                    <p className="mt-1 text-base text-[#1c1c1c]">{item.value}</p>
+                    <p className="mt-1 text-base text-[#1c1c1c]">
+                      {item.value}
+                    </p>
                   )}
                 </li>
               ))}
             </ul>
 
             <form
-              className="mt-12 space-y-5"
+              className="mt-12 space-y-5 text-left"
               onSubmit={(e) => e.preventDefault()}
               noValidate
             >

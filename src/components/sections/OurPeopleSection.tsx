@@ -22,13 +22,13 @@ export default function OurPeopleSection({
 }: OurPeopleSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const teamsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const header = headerRef.current;
-    const grid = gridRef.current;
-    if (!section || !header || !grid) return;
+    const teams = teamsRef.current;
+    if (!section || !header || !teams) return;
 
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -42,20 +42,32 @@ export default function OurPeopleSection({
       const eyebrow = header.querySelector("[data-people-eyebrow]");
       const heading = header.querySelector("[data-people-heading]");
       const accentLine = header.querySelector("[data-people-line]");
-      const cards = gsap.utils.toArray<HTMLElement>("[data-person-card]", grid);
+      const portfolioHeading = teams.querySelector(
+        "[data-portfolio-heading]",
+      );
+      const cards = gsap.utils.toArray<HTMLElement>(
+        "[data-person-card]",
+        teams,
+      );
 
       if (reducedMotion) {
-        gsap.set([eyebrow, heading, accentLine, ...cards], {
-          clearProps: "all",
-          opacity: 1,
-          y: 0,
-          scaleX: 1,
-        });
+        gsap.set(
+          [eyebrow, heading, accentLine, portfolioHeading, ...cards],
+          {
+            clearProps: "all",
+            opacity: 1,
+            y: 0,
+            scaleX: 1,
+          },
+        );
         return;
       }
 
       gsap.set([eyebrow, heading], { y: 56, opacity: 0 });
       gsap.set(accentLine, { scaleX: 0, transformOrigin: "left center" });
+      if (portfolioHeading) {
+        gsap.set(portfolioHeading, { y: 40, opacity: 0 });
+      }
       gsap.set(cards, { y: 80, opacity: 0 });
 
       introTl = gsap.timeline({ paused: true });
@@ -72,7 +84,7 @@ export default function OurPeopleSection({
           "-=0.75",
         )
         .to(
-          cards,
+          cards.filter((card) => card.dataset.personSize === "executive"),
           {
             y: 0,
             opacity: 1,
@@ -81,6 +93,22 @@ export default function OurPeopleSection({
             ease: "power3.out",
           },
           "-=0.55",
+        )
+        .to(
+          portfolioHeading,
+          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" },
+          "-=0.35",
+        )
+        .to(
+          cards.filter((card) => card.dataset.personSize === "portfolio"),
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: "power3.out",
+          },
+          "-=0.45",
         );
 
       introTl.eventCallback("onComplete", () => {
@@ -138,11 +166,12 @@ export default function OurPeopleSection({
     };
   }, []);
 
-  const { eyebrow, heading, members } = BOARD_CONTENT;
+  const { eyebrow, heading, members, portfolioTeam } = BOARD_CONTENT;
 
   return (
     <section
       ref={sectionRef}
+      id="team"
       className={`relative w-full overflow-hidden bg-[#0a0a0a] text-white ${className}`.trim()}
       aria-labelledby="our-people-heading"
     >
@@ -177,48 +206,95 @@ export default function OurPeopleSection({
           />
         </header>
 
-        <div
-          ref={gridRef}
-          className="mt-16 grid gap-12 sm:grid-cols-2 md:mt-20 lg:grid-cols-3 lg:gap-10"
-        >
-          {members.map((member, index) => (
-            <article
-              key={member.id}
-              data-person-card
-              className="group cursor-default opacity-0 will-change-transform"
-              style={{ zIndex: members.length - index }}
-            >
-              <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
-                <Image
-                  src={member.image}
-                  alt={member.imageAlt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
-                  data-person-image
-                />
-                <div
-                  data-person-overlay
-                  className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
-                  aria-hidden
-                />
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                  <p className="font-mono text-[10px] tracking-[0.2em] text-[#ec721a] uppercase">
-                    {String(index + 1).padStart(2, "0")}
-                  </p>
-                  <h3
-                    data-person-name
-                    className={`${playfair.className} mt-2 text-2xl font-medium tracking-tight md:text-[1.65rem]`}
-                  >
-                    {member.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/65">
-                    {member.role}
-                  </p>
+        <div ref={teamsRef}>
+          <div className="mt-16 grid gap-12 sm:grid-cols-2 md:mt-20 lg:grid-cols-3 lg:gap-10">
+            {members.map((member, index) => (
+              <article
+                key={member.id}
+                data-person-card
+                data-person-size="executive"
+                className="group cursor-default opacity-0 will-change-transform"
+                style={{ zIndex: members.length - index }}
+              >
+                <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
+                  <Image
+                    src={member.image}
+                    alt={member.imageAlt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+                    data-person-image
+                  />
+                  <div
+                    data-person-overlay
+                    className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
+                    aria-hidden
+                  />
+                  <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
+                    <p className="font-mono text-[10px] tracking-[0.2em] text-[#ec721a] uppercase">
+                      {String(index + 1).padStart(2, "0")}
+                    </p>
+                    <h3
+                      data-person-name
+                      className={`${playfair.className} mt-2 text-2xl font-medium tracking-tight md:text-[1.65rem]`}
+                    >
+                      {member.name}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-white/65">
+                      {member.role}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-20 md:mt-24 lg:mt-28">
+            <h3
+              data-portfolio-heading
+              className={`${playfair.className} text-2xl font-medium tracking-tight text-white/90 md:text-3xl`}
+            >
+              {portfolioTeam.heading}
+            </h3>
+
+            <div className="mt-10 grid grid-cols-2 gap-6 sm:gap-8 md:mt-12 lg:grid-cols-4 lg:gap-8">
+              {portfolioTeam.members.map((member, index) => (
+                <article
+                  key={member.id}
+                  data-person-card
+                  data-person-size="portfolio"
+                  className="group mx-auto w-full max-w-55 cursor-default opacity-0 will-change-transform lg:max-w-60"
+                  style={{ zIndex: portfolioTeam.members.length - index }}
+                >
+                  <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
+                    <Image
+                      src={member.image}
+                      alt={member.imageAlt}
+                      fill
+                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 180px"
+                      className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+                      data-person-image
+                    />
+                    <div
+                      data-person-overlay
+                      className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
+                      aria-hidden
+                    />
+                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                      <h4
+                        className={`${playfair.className} text-lg font-medium tracking-tight md:text-xl`}
+                      >
+                        {member.name}
+                      </h4>
+                      <p className="mt-1 text-xs leading-relaxed text-white/65 md:text-sm">
+                        {member.role}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

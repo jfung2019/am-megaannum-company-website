@@ -1,118 +1,150 @@
 "use client";
 
-// import Image from "next/image";
-// import Link from "next/link";
-import { forwardRef } from "react";
+import { useEffect, useRef } from "react";
+import { Playfair_Display } from "next/font/google";
+import gsap from "gsap";
 
-// const LOGO_SRC = "/images/Megaannum_Logo.ai.png";
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
 
 type HeroOverlayProps = {
   className?: string;
 };
 
-const HeroOverlay = forwardRef<HTMLElement, HeroOverlayProps>(
-  function HeroOverlay({ className = "" }, ref) {
-    return (
-      <header
-        ref={ref}
-        className={`pointer-events-none relative z-10 flex h-full flex-col ${className}`}
-      >
-        <nav className="pointer-events-auto cursor-pointer flex items-center justify-between px-6 py-6 md:px-10 md:py-8">
-          {/* <Link href="/" className="relative block h-10 w-44 shrink-0 md:h-12 md:w-54">
-            <Image
-              src={LOGO_SRC}
-              alt="Megaannum"
-              fill
-              priority
-              className="object-contain object-left"
-              sizes="(max-width: 768px) 144px, 160px"
-            />
-          </Link> */}
-          {/* tracking-[0.2em] */}
-          <span className="text-lg font-bold text-[#ec721a] uppercase">
-            Megaannum
-          </span>
-          <div className="hidden items-center gap-8 text-sm text-white/70 md:flex">
-            <a href="#platform" className="transition-colors hover:text-white">
-              Platform
-            </a>
-            <a href="#solutions" className="transition-colors hover:text-white">
-              Solutions
-            </a>
-            <a href="#contact" className="transition-colors hover:text-white">
-              Contact
-            </a>
-          </div>
-        </nav>
+export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
+  const rootRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const headingLineRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
-        <div className="relative flex flex-1 flex-col justify-center px-6 pb-16 md:px-10 md:pb-24">
-          <div data-hero-intro className="max-w-3xl">
-            {/* <p className="mb-4 text-xs font-medium tracking-[0.25em] text-[#ec721a] uppercase">
-              AI Treasury Intelligence
-            </p> */}
-            <h1 className="text-4xl leading-[1.08] font-semibold tracking-tight text-white md:text-6xl lg:text-7xl">
-              {/* See liquidity
-              <br />
-              before the market moves. */}
+  useEffect(() => {
+    const root = rootRef.current;
+    const panel = panelRef.current;
+    const headingLines = headingLineRefs.current.filter(Boolean);
+    if (!root || !panel || headingLines.length === 0) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const ctx = gsap.context(() => {
+      if (reducedMotion) {
+        gsap.set([...headingLines, panel], { clearProps: "all", opacity: 1 });
+        return;
+      }
+
+      gsap.set(headingLines, { y: 36, opacity: 0 });
+      gsap.set(panel, { y: 28, opacity: 0 });
+
+      gsap
+        .timeline({ defaults: { ease: "power3.out" } })
+        .to(headingLines, {
+          y: 0,
+          opacity: 1,
+          duration: 0.95,
+          stagger: 0.12,
+        })
+        .to(
+          panel,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.85,
+          },
+          "-=0.35",
+        );
+    }, root);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <header
+      ref={rootRef}
+      className={`pointer-events-none absolute inset-0 z-10 flex h-full flex-col ${className}`.trim()}
+    >
+      <nav className="pointer-events-auto flex cursor-pointer items-center justify-between px-6 py-6 md:px-10 md:py-8 lg:px-14 xl:px-20">
+        <span className="text-lg font-bold text-[#ec721a] uppercase">
+          Megaannum
+        </span>
+        <div className="hidden items-center gap-5 text-sm text-white/70 md:flex lg:gap-7">
+          <a href="#home" className="transition-colors hover:text-white">
+            Home
+          </a>
+          <a href="#platform" className="transition-colors hover:text-white">
+            Investment Edge
+          </a>
+          <a href="#partners" className="transition-colors hover:text-white">
+            Partners
+          </a>
+          <a href="#team" className="transition-colors hover:text-white">
+            Our Team
+          </a>
+          <a href="#contact" className="transition-colors hover:text-white">
+            Contact
+          </a>
+          <a href="#platform" className="transition-colors hover:text-white">
+            Client portal
+          </a>
+        </div>
+      </nav>
+
+      <div className="relative flex flex-1 flex-col px-6 pt-10 pb-48 md:px-10 md:pt-14 md:pb-56 lg:px-14 xl:px-20">
+        <div className="mt-6 max-w-3xl md:mt-10 lg:mt-14">
+          <h1
+            className={`${playfair.className} text-5xl leading-[1.03] font-medium tracking-tight text-white md:text-6xl lg:text-7xl xl:text-[5.75rem]`}
+          >
+            <span
+              ref={(el) => {
+                headingLineRefs.current[0] = el;
+              }}
+              className="block opacity-0"
+            >
               Transforming
-              <br />
-              <span className="text-[#ec721a]">Financial</span>
-              <br />
+            </span>
+            <span
+              ref={(el) => {
+                headingLineRefs.current[1] = el;
+              }}
+              className="block text-[#ec721a] opacity-0"
+            >
+              Financial
+            </span>
+            <span
+              ref={(el) => {
+                headingLineRefs.current[2] = el;
+              }}
+              className="block opacity-0"
+            >
               Intelligence
-            </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">
-              Institutional-grade treasury orchestration powered by predictive
-              AI — from energy to insight in a single cinematic flow.
-            </p>
-            <div className="pointer-events-auto mt-10 flex flex-wrap gap-4">
-              <a
-                href="#platform"
-                className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-medium text-slate-950 transition hover:bg-sky-50"
-              >
-                Explore platform
-              </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/5 px-7 py-3.5 text-sm font-medium text-white backdrop-blur-sm transition hover:border-white/40 hover:bg-white/10"
-              >
-                Web Portal
-              </a>
-            </div>
-          </div>
+            </span>
+          </h1>
+        </div>
+      </div>
 
-          <div
-            data-hero-mid
-            className="pointer-events-none absolute bottom-24 left-6 max-w-md opacity-0 md:left-10"
-          >
-            <p className="text-sm tracking-wide text-sky-200/80 uppercase">
-              Holographic intelligence
-            </p>
-            <p className="mt-2 text-lg text-white/75">
-              Dashboard states morph in real time as capital flows shift.
+      <div
+        ref={panelRef}
+        className="pointer-events-auto absolute inset-x-0 bottom-0 border-y border-white/10 bg-[#071a33]/40 px-6 py-8 text-white opacity-0 shadow-2xl shadow-black/25 backdrop-blur-xl md:px-10 md:py-10 lg:px-14 xl:px-20"
+      >
+        <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div className="max-w-2xl text-base leading-relaxed text-white/85 md:text-lg md:leading-8">
+            <p>
+              We combine institutional trading experience, deep liquidity access,
+              and advanced AI systems to identify opportunities across global
+              markets.
             </p>
           </div>
-
-          <div
-            data-hero-exit
-            className="pointer-events-none absolute bottom-28 right-6 max-w-sm text-right opacity-0 md:right-10"
-          >
-            <p className="text-sm tracking-wide text-white/50 uppercase">
-              Entering the dimension
-            </p>
-            <p className="mt-2 text-xl font-medium text-white/90">
-              Continue into the platform
-            </p>
+          <div className="flex shrink-0 flex-wrap gap-4">
+            <a
+              href="#platform"
+              className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-medium text-slate-950 transition hover:bg-sky-50"
+            >
+              Client portal
+            </a>
           </div>
         </div>
-
-        <div
-          data-hero-vignette
-          className="pointer-events-none absolute inset-0 bg-linear-to-b from-slate-950/50 via-transparent to-slate-950/70 opacity-50"
-          aria-hidden
-        />
-      </header>
-    );
-  },
-);
-
-export default HeroOverlay;
+      </div>
+    </header>
+  );
+}

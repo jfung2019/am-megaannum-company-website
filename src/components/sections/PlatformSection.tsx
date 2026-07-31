@@ -1,25 +1,22 @@
-import { forwardRef } from "react";
-
 import PlatformSectionContent from "./PlatformSectionContent";
 import { PLATFORM_SECTION_BACKGROUND } from "./platform/platform.config";
 
-const PlatformSection = forwardRef<
-  HTMLElement,
-  { className?: string }
->(function PlatformSection({ className = "" }, ref) {
+type PlatformSectionProps = {
+  className?: string;
+};
+
+export default function PlatformSection({
+  className = "",
+}: PlatformSectionProps) {
   return (
     <section
-      ref={ref}
       id="platform"
-      className={`relative min-h-svh w-full origin-center pointer-events-none ${className}`.trim()}
+      className={`relative min-h-svh w-full origin-center ${className}`.trim()}
       style={{ backgroundColor: PLATFORM_SECTION_BACKGROUND }}
       aria-labelledby="platform-heading"
-      aria-hidden
       data-platform-section
     >
       <PlatformSectionContent />
     </section>
   );
-});
-
-export default PlatformSection;
+}
