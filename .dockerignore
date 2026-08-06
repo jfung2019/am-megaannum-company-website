@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+megaannum-company-website.code-workspace
+npm-debug.log*
+.env*
+README.md

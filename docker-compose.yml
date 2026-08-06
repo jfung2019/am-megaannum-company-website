@@ -1,0 +1,14 @@
+services:
+  company-website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: company-website
+    restart: unless-stopped
+    networks:
+      - portal_net
+
+networks:
+  portal_net:
+    external: true
+    name: client-web-portal_default
