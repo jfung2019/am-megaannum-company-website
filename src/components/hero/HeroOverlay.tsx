@@ -83,6 +83,9 @@ export default function HeroOverlay({
             // The brand mark is the topmost thing on the page; lazy-loading it
             // would flash an empty nav on first paint.
             priority
+            // The CMS image route has no file extension for next/image to
+            // detect an SVG from the URL alone, so it has to be told.
+            unoptimized={logo.mime === "image/svg+xml"}
           />
         ) : (
           <span className="text-lg font-bold text-[#ec721a] uppercase">

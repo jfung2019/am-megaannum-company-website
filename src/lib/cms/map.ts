@@ -56,8 +56,16 @@ function rows(v: unknown): Rec[] | null {
   return kept.length ? kept : null;
 }
 
-/** An ImageRef becomes a URL on the CMS's public image route (no key: browsers fetch it). */
-function imageUrl(ref: unknown): { url: string; width: number; height: number } | null {
+export type CmsImage = { url: string; width: number; height: number; mime: string };
+
+/**
+ * An ImageRef becomes a URL on the CMS's public image route (no key: browsers
+ * fetch it). `mime` rides along so components can tell next/image to skip
+ * optimizing SVGs -- the URL has no file extension for Next to detect that
+ * itself, and the CMS's own upload endpoint accepts image/svg+xml alongside
+ * raster formats for any image, not just partner logos.
+ */
+function imageUrl(ref: unknown): CmsImage | null {
   const r = obj(ref);
   const width = num(r.width);
   const height = num(r.height);
@@ -65,7 +73,7 @@ function imageUrl(ref: unknown): { url: string; width: number; height: number } 
   if (typeof r.id !== "string" || !r.id || !base || width === null || height === null) {
     return null;
   }
-  return { url: `${base}/content/images/${r.id}`, width, height };
+  return { url: `${base}/content/images/${r.id}`, width, height, mime: str(r.mime, "") };
 }
 
 /**
@@ -151,6 +159,7 @@ function member(m: Rec, index: number): TeamMember {
     // Empty src is not a valid next/image input, so the card renders a
     // placeholder instead of dropping the person entirely.
     image: photo?.url ?? "",
+    imageMime: photo?.mime ?? "",
     imageAlt: role ? `Portrait of ${name}, ${role}` : `Portrait of ${name}`,
   };
 }

@@ -67,6 +67,10 @@ export default function PartnersCarousel({
                     // Above the fold on most viewports, and the marquee has no
                     // scroll trigger to lazily wait for.
                     priority={index < partners.length}
+                    // Partner marks are commonly SVGs, and the CMS image route
+                    // has no file extension for next/image to detect that from
+                    // the URL alone.
+                    unoptimized={image.mime === "image/svg+xml"}
                   />
                 ) : Logo ? (
                   <Logo className="h-7 w-auto text-black md:h-8" />

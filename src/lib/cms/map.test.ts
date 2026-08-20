@@ -87,7 +87,12 @@ describe("mapping a published payload", () => {
     const raw = payload();
 
     expect(heroContent(raw)).toEqual({
-      logo: { url: `${BASE}/content/images/brand-1`, width: 100, height: 50 },
+      logo: {
+        url: `${BASE}/content/images/brand-1`,
+        width: 100,
+        height: 50,
+        mime: "image/png",
+      },
       brand: HERO_CONTENT.brand,
       headingLines: [
         { text: "Published", color: "#ffffff" },
@@ -111,7 +116,12 @@ describe("mapping a published payload", () => {
       {
         id: "p1",
         name: "Northmark",
-        image: { url: `${BASE}/content/images/logo-1`, width: 100, height: 50 },
+        image: {
+          url: `${BASE}/content/images/logo-1`,
+          width: 100,
+          height: 50,
+          mime: "image/png",
+        },
         Logo: null,
       },
     ]);
@@ -125,6 +135,7 @@ describe("mapping a published payload", () => {
         name: "Miriam",
         role: "Chair",
         image: `${BASE}/content/images/photo-1`,
+        imageMime: "image/png",
         imageAlt: "Portrait of Miriam, Chair",
       },
     ]);
@@ -191,7 +202,24 @@ describe("falling back to the bundled configs", () => {
   it("keeps a member whose photo is missing, with an empty image for the placeholder", () => {
     const team = { board: [{ id: "m1", name: "Miriam", title: "Chair", photo: null }] };
     expect(peopleContent({ team }).members).toEqual([
-      { id: "m1", name: "Miriam", role: "Chair", image: "", imageAlt: "Portrait of Miriam, Chair" },
+      {
+        id: "m1",
+        name: "Miriam",
+        role: "Chair",
+        image: "",
+        imageMime: "",
+        imageAlt: "Portrait of Miriam, Chair",
+      },
     ]);
+  });
+
+  it("marks an SVG image so next/image skips optimizing it", () => {
+    // The CMS route has no file extension, so next/image can't tell an SVG
+    // from a raster image by URL alone -- it 400s trying to optimize one.
+    const raw = {
+      partners: [{ id: "p1", name: "Acme", logo: img("logo-1") }],
+    };
+    raw.partners[0].logo = { id: "logo-1", width: 100, height: 50, mime: "image/svg+xml" };
+    expect(partnerList(raw)[0].image?.mime).toBe("image/svg+xml");
   });
 });

@@ -4,9 +4,11 @@ export type HeroHeadingLine = {
   color: string;
 };
 
+import type { CmsImage } from "@/lib/cms/map";
+
 export type HeroContent = {
   /** Brand mark from the CMS. Null falls back to the `brand` wordmark below. */
-  logo: { url: string; width: number; height: number } | null;
+  logo: CmsImage | null;
   brand: string;
   headingLines: HeroHeadingLine[];
   body: string;

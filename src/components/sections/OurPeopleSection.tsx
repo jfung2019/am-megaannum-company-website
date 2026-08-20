@@ -219,7 +219,7 @@ export default function OurPeopleSection({
                 style={{ zIndex: members.length - index }}
               >
                 <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
-{member.image && (
+                  {member.image && (
                     <Image
                       src={member.image}
                       alt={member.imageAlt}
@@ -227,8 +227,9 @@ export default function OurPeopleSection({
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
                       data-person-image
+                      unoptimized={member.imageMime === "image/svg+xml"}
                     />
-)}
+                  )}
                   <div
                     data-person-overlay
                     className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
@@ -271,7 +272,7 @@ export default function OurPeopleSection({
                   style={{ zIndex: portfolioTeam.members.length - index }}
                 >
                   <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
-{member.image && (
+                    {member.image && (
                       <Image
                         src={member.image}
                         alt={member.imageAlt}
@@ -279,8 +280,9 @@ export default function OurPeopleSection({
                         sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 180px"
                         className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
                         data-person-image
+                        unoptimized={member.imageMime === "image/svg+xml"}
                       />
-)}
+                    )}
                     <div
                       data-person-overlay
                       className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"

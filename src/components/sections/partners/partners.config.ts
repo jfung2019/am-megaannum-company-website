@@ -1,5 +1,7 @@
 import type { ComponentType } from "react";
 
+import type { CmsImage } from "@/lib/cms/map";
+
 import {
   ClearflowLogo,
   HorizonLogo,
@@ -24,7 +26,7 @@ export type Partner = {
 export type PartnerView = {
   id: string;
   name: string;
-  image: { url: string; width: number; height: number } | null;
+  image: CmsImage | null;
   Logo: ComponentType<{ className?: string }> | null;
 };
 
