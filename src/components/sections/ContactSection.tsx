@@ -5,7 +5,10 @@ import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
 import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
-import { CONTACT_CONTENT } from "./contact/contact.config";
+import {
+  CONTACT_CONTENT,
+  type ContactContent,
+} from "./contact/contact.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -13,10 +16,14 @@ const playfair = Playfair_Display({
 });
 
 type ContactSectionProps = {
+  content?: ContactContent;
   className?: string;
 };
 
-export default function ContactSection({ className = "" }: ContactSectionProps) {
+export default function ContactSection({
+  className = "",
+  content = CONTACT_CONTENT,
+}: ContactSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -63,7 +70,7 @@ export default function ContactSection({ className = "" }: ContactSectionProps) 
     };
   }, []);
 
-  const { eyebrow, heading, subhead, details, form } = CONTACT_CONTENT;
+  const { eyebrow, heading, subhead, details, form } = content;
 
   return (
     <section

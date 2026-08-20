@@ -8,6 +8,7 @@ import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
 import {
   formatPlatformStatValue,
   PLATFORM_CONTENT,
+  type PlatformContent,
 } from "./platform/platform.config";
 
 const playfair = Playfair_Display({
@@ -17,14 +18,16 @@ const playfair = Playfair_Display({
 
 type PlatformSectionContentProps = {
   className?: string;
+  content?: PlatformContent;
 };
 
 export default function PlatformSectionContent({
   className = "",
+  content = PLATFORM_CONTENT,
 }: PlatformSectionContentProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDListElement>(null);
-  const { headline, intro, stats, footnote } = PLATFORM_CONTENT;
+  const { headline, intro, stats, footnote } = content;
 
   useLayoutEffect(() => {
     const root = rootRef.current;
