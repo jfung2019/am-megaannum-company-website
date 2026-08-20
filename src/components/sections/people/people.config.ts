@@ -2,11 +2,22 @@ export type TeamMember = {
   id: string;
   name: string;
   role: string;
+  /** Empty when the CMS has no photo for this person; the card renders a placeholder. */
   image: string;
   imageAlt: string;
 };
 
-export const BOARD_CONTENT = {
+export type PeopleContent = {
+  eyebrow: string;
+  heading: string;
+  members: TeamMember[];
+  portfolioTeam: {
+    heading: string;
+    members: TeamMember[];
+  };
+};
+
+export const BOARD_CONTENT: PeopleContent = {
   eyebrow: "Board of Directors",
   heading: "They make it possible",
   members: [
@@ -34,7 +45,7 @@ export const BOARD_CONTENT = {
         "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=900&h=1200&fit=crop&q=80",
       imageAlt: "Portrait of Teddy, Chief Technology Officer",
     },
-  ] satisfies TeamMember[],
+  ],
   portfolioTeam: {
     heading: "Portfolio management team",
     members: [
@@ -70,6 +81,6 @@ export const BOARD_CONTENT = {
           "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=600&h=800&fit=crop&q=80",
         imageAlt: "Portrait of Amy, Portfolio Manager",
       },
-    ] satisfies TeamMember[],
+    ],
   },
-} as const;
+};

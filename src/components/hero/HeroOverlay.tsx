@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
+import { HERO_CONTENT, type HeroContent } from "./hero.config";
+
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
@@ -11,9 +13,14 @@ const playfair = Playfair_Display({
 
 type HeroOverlayProps = {
   className?: string;
+  content?: HeroContent;
 };
 
-export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
+export default function HeroOverlay({
+  className = "",
+  content = HERO_CONTENT,
+}: HeroOverlayProps) {
+  const { headingLines: lines, body } = content;
   const rootRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const headingLineRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -95,30 +102,18 @@ export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
           <h1
             className={`${playfair.className} text-5xl leading-[1.03] font-medium tracking-tight text-white md:text-6xl lg:text-7xl xl:text-[5.75rem]`}
           >
-            <span
-              ref={(el) => {
-                headingLineRefs.current[0] = el;
-              }}
-              className="block opacity-0"
-            >
-              Transforming
-            </span>
-            <span
-              ref={(el) => {
-                headingLineRefs.current[1] = el;
-              }}
-              className="block text-[#ec721a] opacity-0"
-            >
-              Financial
-            </span>
-            <span
-              ref={(el) => {
-                headingLineRefs.current[2] = el;
-              }}
-              className="block opacity-0"
-            >
-              Intelligence
-            </span>
+            {lines.map((line, index) => (
+              <span
+                key={`${line.text}-${index}`}
+                ref={(el) => {
+                  headingLineRefs.current[index] = el;
+                }}
+                className="block opacity-0"
+                style={{ color: line.color }}
+              >
+                {line.text}
+              </span>
+            ))}
           </h1>
         </div>
       </div>
@@ -129,11 +124,7 @@ export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
       >
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl text-base leading-relaxed text-white/85 md:text-lg md:leading-8">
-            <p>
-              We combine institutional trading experience, deep liquidity access,
-              and advanced AI systems to identify opportunities across global
-              markets.
-            </p>
+            <p>{body}</p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-4">
             <a

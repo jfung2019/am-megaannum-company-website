@@ -1,4 +1,24 @@
-export const CONTACT_CONTENT = {
+export type ContactDetail = {
+  label: string;
+  value: string;
+  href?: string;
+};
+
+export type ContactContent = {
+  eyebrow: string;
+  heading: string;
+  subhead: string;
+  details: ContactDetail[];
+  form: {
+    nameLabel: string;
+    emailLabel: string;
+    companyLabel: string;
+    messageLabel: string;
+    submitLabel: string;
+  };
+};
+
+export const CONTACT_CONTENT: ContactContent = {
   eyebrow: "Contact",
   heading: "Let's build the future of treasury intelligence.",
   subhead:
@@ -15,4 +35,4 @@ export const CONTACT_CONTENT = {
     messageLabel: "How can we help?",
     submitLabel: "Send message",
   },
-} as const;
+};
