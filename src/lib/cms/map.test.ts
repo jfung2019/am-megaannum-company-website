@@ -28,6 +28,7 @@ function payload() {
   return {
     general: { accent: "#123456" },
     landing: {
+      logo: img("brand-1"),
       lower: "CMS body copy.",
       lines: [
         { id: "1", text: "Published", color: "#ffffff" },
@@ -86,6 +87,8 @@ describe("mapping a published payload", () => {
     const raw = payload();
 
     expect(heroContent(raw)).toEqual({
+      logo: { url: `${BASE}/content/images/brand-1`, width: 100, height: 50 },
+      brand: HERO_CONTENT.brand,
       headingLines: [
         { text: "Published", color: "#ffffff" },
         { text: "Headline", color: "#EC721A" },
@@ -150,6 +153,13 @@ describe("falling back to the bundled configs", () => {
     expect(peopleContent(raw)).toEqual(BOARD_CONTENT);
     expect(contactContent(raw)).toEqual(CONTACT_CONTENT);
     expect(partnerList(raw).map((p) => p.name)).toEqual(PARTNERS.map((p) => p.name));
+  });
+
+  it("leaves the logo null when the CMS has none, so the wordmark shows instead", () => {
+    // next/image rejects an empty src, and the nav must not render blank.
+    expect(heroContent({ landing: { logo: null } }).logo).toBeNull();
+    // An ImageRef missing its dimensions is unusable too.
+    expect(heroContent({ landing: { logo: { id: "x" } } }).logo).toBeNull();
   });
 
   it("treats a blank heading as absent, so pre-migration documents still read well", () => {

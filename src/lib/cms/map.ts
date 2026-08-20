@@ -97,6 +97,8 @@ export function heroContent(raw: unknown): HeroContent {
     }))
     .filter((l) => l.text);
   return {
+    logo: imageUrl(landing.logo),
+    brand: HERO_CONTENT.brand,
     headingLines: lines?.length ? lines : HERO_CONTENT.headingLines,
     body: str(landing.lower, HERO_CONTENT.body),
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
@@ -20,7 +21,7 @@ export default function HeroOverlay({
   className = "",
   content = HERO_CONTENT,
 }: HeroOverlayProps) {
-  const { headingLines: lines, body } = content;
+  const { logo, brand, headingLines: lines, body } = content;
   const rootRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const headingLineRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -72,9 +73,22 @@ export default function HeroOverlay({
       className={`pointer-events-none absolute inset-0 z-10 flex h-full flex-col ${className}`.trim()}
     >
       <nav className="pointer-events-auto flex cursor-pointer items-center justify-between px-6 py-6 md:px-10 md:py-8 lg:px-14 xl:px-20">
-        <span className="text-lg font-bold text-[#ec721a] uppercase">
-          Megaannum
-        </span>
+        {logo ? (
+          <Image
+            src={logo.url}
+            alt={brand}
+            width={logo.width}
+            height={logo.height}
+            className="h-7 w-auto object-contain md:h-8"
+            // The brand mark is the topmost thing on the page; lazy-loading it
+            // would flash an empty nav on first paint.
+            priority
+          />
+        ) : (
+          <span className="text-lg font-bold text-[#ec721a] uppercase">
+            {brand}
+          </span>
+        )}
         <div className="hidden items-center gap-5 text-sm text-white/70 md:flex lg:gap-7">
           <a href="#home" className="transition-colors hover:text-white">
             Home

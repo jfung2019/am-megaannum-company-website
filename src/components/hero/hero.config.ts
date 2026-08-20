@@ -5,11 +5,16 @@ export type HeroHeadingLine = {
 };
 
 export type HeroContent = {
+  /** Brand mark from the CMS. Null falls back to the `brand` wordmark below. */
+  logo: { url: string; width: number; height: number } | null;
+  brand: string;
   headingLines: HeroHeadingLine[];
   body: string;
 };
 
 export const HERO_CONTENT: HeroContent = {
+  logo: null,
+  brand: "Megaannum",
   headingLines: [
     { text: "Transforming", color: "#ffffff" },
     { text: "Financial", color: "#ec721a" },
