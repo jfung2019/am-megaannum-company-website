@@ -29,6 +29,7 @@ function payload() {
     general: { accent: "#123456" },
     landing: {
       logo: img("brand-1"),
+      heroVideo: { id: "hero-1", width: 1920, height: 1080, mime: "video/mp4" },
       lower: "CMS body copy.",
       lines: [
         { id: "1", text: "Published", color: "#ffffff" },
@@ -99,6 +100,7 @@ describe("mapping a published payload", () => {
         { text: "Headline", color: "#EC721A" },
       ],
       body: "CMS body copy.",
+      videoUrl: `${BASE}/content/images/hero-1`,
     });
 
     expect(platformContent(raw)).toEqual({
@@ -164,6 +166,15 @@ describe("falling back to the bundled configs", () => {
     expect(peopleContent(raw)).toEqual(BOARD_CONTENT);
     expect(contactContent(raw)).toEqual(CONTACT_CONTENT);
     expect(partnerList(raw).map((p) => p.name)).toEqual(PARTNERS.map((p) => p.name));
+  });
+
+  it("keeps the bundled clip when the CMS has no hero video", () => {
+    // The hero must never render a blank <video>, and documents published before
+    // the field existed have no heroVideo at all.
+    expect(heroContent({ landing: { logo: null } }).videoUrl).toBe(HERO_CONTENT.videoUrl);
+    expect(heroContent({ landing: { heroVideo: { id: "x" } } }).videoUrl).toBe(
+      HERO_CONTENT.videoUrl,
+    );
   });
 
   it("leaves the logo null when the CMS has none, so the wordmark shows instead", () => {

@@ -12,6 +12,8 @@ export type HeroContent = {
   brand: string;
   headingLines: HeroHeadingLine[];
   body: string;
+  /** Background clip. The CMS upload when there is one, else the stock clip. */
+  videoUrl: string;
 };
 
 export const HERO_CONTENT: HeroContent = {
@@ -24,4 +26,5 @@ export const HERO_CONTENT: HeroContent = {
   ],
   body:
     "We combine institutional trading experience, deep liquidity access, and advanced AI systems to identify opportunities across global markets.",
+  videoUrl: "https://www.pexels.com/download/video/36435706/",
 };

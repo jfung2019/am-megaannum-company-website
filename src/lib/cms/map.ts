@@ -109,6 +109,8 @@ export function heroContent(raw: unknown): HeroContent {
     brand: HERO_CONTENT.brand,
     headingLines: lines?.length ? lines : HERO_CONTENT.headingLines,
     body: str(landing.lower, HERO_CONTENT.body),
+    // Same media route as an image; only the url is of any use to a <video>.
+    videoUrl: imageUrl(landing.heroVideo)?.url ?? HERO_CONTENT.videoUrl,
   };
 }
 
