@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
+
+import { HERO_CONTENT, type HeroContent } from "./hero.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -11,9 +14,14 @@ const playfair = Playfair_Display({
 
 type HeroOverlayProps = {
   className?: string;
+  content?: HeroContent;
 };
 
-export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
+export default function HeroOverlay({
+  className = "",
+  content = HERO_CONTENT,
+}: HeroOverlayProps) {
+  const { logo, brand, headingLines: lines, body } = content;
   const rootRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const headingLineRefs = useRef<Array<HTMLSpanElement | null>>([]);
@@ -65,9 +73,25 @@ export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
       className={`pointer-events-none absolute inset-0 z-10 flex h-full flex-col ${className}`.trim()}
     >
       <nav className="pointer-events-auto flex cursor-pointer items-center justify-between px-6 py-6 md:px-10 md:py-8 lg:px-14 xl:px-20">
-        <span className="text-lg font-bold text-[#ec721a] uppercase">
-          Megaannum
-        </span>
+        {logo ? (
+          <Image
+            src={logo.url}
+            alt={brand}
+            width={logo.width}
+            height={logo.height}
+            className="h-7 w-auto object-contain md:h-8"
+            // The brand mark is the topmost thing on the page; lazy-loading it
+            // would flash an empty nav on first paint.
+            priority
+            // The CMS image route has no file extension for next/image to
+            // detect an SVG from the URL alone, so it has to be told.
+            unoptimized={logo.mime === "image/svg+xml"}
+          />
+        ) : (
+          <span className="text-lg font-bold text-[#ec721a] uppercase">
+            {brand}
+          </span>
+        )}
         <div className="hidden items-center gap-5 text-sm text-white/70 md:flex lg:gap-7">
           <a href="#home" className="transition-colors hover:text-white">
             Home
@@ -95,30 +119,18 @@ export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
           <h1
             className={`${playfair.className} text-5xl leading-[1.03] font-medium tracking-tight text-white md:text-6xl lg:text-7xl xl:text-[5.75rem]`}
           >
-            <span
-              ref={(el) => {
-                headingLineRefs.current[0] = el;
-              }}
-              className="block opacity-0"
-            >
-              Transforming
-            </span>
-            <span
-              ref={(el) => {
-                headingLineRefs.current[1] = el;
-              }}
-              className="block text-[#ec721a] opacity-0"
-            >
-              Financial
-            </span>
-            <span
-              ref={(el) => {
-                headingLineRefs.current[2] = el;
-              }}
-              className="block opacity-0"
-            >
-              Intelligence
-            </span>
+            {lines.map((line, index) => (
+              <span
+                key={`${line.text}-${index}`}
+                ref={(el) => {
+                  headingLineRefs.current[index] = el;
+                }}
+                className="block opacity-0"
+                style={{ color: line.color }}
+              >
+                {line.text}
+              </span>
+            ))}
           </h1>
         </div>
       </div>
@@ -129,11 +141,7 @@ export default function HeroOverlay({ className = "" }: HeroOverlayProps) {
       >
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="max-w-2xl text-base leading-relaxed text-white/85 md:text-lg md:leading-8">
-            <p>
-              We combine institutional trading experience, deep liquidity access,
-              and advanced AI systems to identify opportunities across global
-              markets.
-            </p>
+            <p>{body}</p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-4">
             <a

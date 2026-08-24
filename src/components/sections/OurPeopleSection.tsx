@@ -6,7 +6,7 @@ import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
 import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
-import { BOARD_CONTENT } from "./people/people.config";
+import { BOARD_CONTENT, type PeopleContent } from "./people/people.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -15,10 +15,12 @@ const playfair = Playfair_Display({
 
 type OurPeopleSectionProps = {
   className?: string;
+  content?: PeopleContent;
 };
 
 export default function OurPeopleSection({
   className = "",
+  content = BOARD_CONTENT,
 }: OurPeopleSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
@@ -166,7 +168,7 @@ export default function OurPeopleSection({
     };
   }, []);
 
-  const { eyebrow, heading, members, portfolioTeam } = BOARD_CONTENT;
+  const { eyebrow, heading, members, portfolioTeam } = content;
 
   return (
     <section
@@ -217,14 +219,17 @@ export default function OurPeopleSection({
                 style={{ zIndex: members.length - index }}
               >
                 <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
-                  <Image
-                    src={member.image}
-                    alt={member.imageAlt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
-                    data-person-image
-                  />
+                  {member.image && (
+                    <Image
+                      src={member.image}
+                      alt={member.imageAlt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+                      data-person-image
+                      unoptimized={member.imageMime === "image/svg+xml"}
+                    />
+                  )}
                   <div
                     data-person-overlay
                     className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
@@ -267,14 +272,17 @@ export default function OurPeopleSection({
                   style={{ zIndex: portfolioTeam.members.length - index }}
                 >
                   <div className="relative aspect-3/4 overflow-hidden bg-neutral-900">
-                    <Image
-                      src={member.image}
-                      alt={member.imageAlt}
-                      fill
-                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 180px"
-                      className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
-                      data-person-image
-                    />
+                    {member.image && (
+                      <Image
+                        src={member.image}
+                        alt={member.imageAlt}
+                        fill
+                        sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 180px"
+                        className="object-cover object-top grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+                        data-person-image
+                        unoptimized={member.imageMime === "image/svg+xml"}
+                      />
+                    )}
                     <div
                       data-person-overlay
                       className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"

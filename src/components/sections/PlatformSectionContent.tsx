@@ -8,6 +8,7 @@ import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
 import {
   formatPlatformStatValue,
   PLATFORM_CONTENT,
+  type PlatformContent,
 } from "./platform/platform.config";
 
 const playfair = Playfair_Display({
@@ -17,14 +18,16 @@ const playfair = Playfair_Display({
 
 type PlatformSectionContentProps = {
   className?: string;
+  content?: PlatformContent;
 };
 
 export default function PlatformSectionContent({
   className = "",
+  content = PLATFORM_CONTENT,
 }: PlatformSectionContentProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDListElement>(null);
-  const { headline, intro, stats, footnote } = PLATFORM_CONTENT;
+  const { headline, intro, stats, footnote } = content;
 
   useLayoutEffect(() => {
     const root = rootRef.current;
@@ -101,9 +104,10 @@ export default function PlatformSectionContent({
             id="platform-heading"
             className={`${playfair.className} text-[2.35rem] leading-[1.12] font-medium tracking-tight text-white md:text-5xl md:leading-[1.1] lg:text-[3.35rem] lg:leading-[1.08]`}
           >
-            {headline.line1}
-            <br />
-            {headline.line2}
+            {/* ponytail: one string, wrapped by the max-w above. Split on "
+"
+                if an editor ever needs to control where the line breaks. */}
+            {headline}
           </h2>
 
           <p className="mt-8 max-w-2xl text-base leading-relaxed text-white/85 md:mt-10 md:text-[1.05rem] md:leading-8">

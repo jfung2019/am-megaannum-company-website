@@ -10,11 +10,18 @@ export type PlatformStat = {
   label: string;
 };
 
-export const PLATFORM_CONTENT = {
-  headline: {
-    line1: "Our investment",
-    line2: "edge",
-  },
+export type PlatformContent = {
+  /** Rendered as one heading; the CMS stores it as a single string. */
+  headline: string;
+  intro: string;
+  stats: PlatformStat[];
+  footnote: string;
+  /** Section background, from the CMS accent colour. */
+  background: string;
+};
+
+export const PLATFORM_CONTENT: PlatformContent = {
+  headline: "Our investment edge",
   intro:
     "We trade across multiple time frames—from seconds to months—with deep liquidity in every liquid symbol, including derivatives. Advanced AI and ML power our process, led by senior portfolio managers and traders from large banks and hedge funds.",
   stats: [
@@ -35,9 +42,10 @@ export const PLATFORM_CONTENT = {
       from: 0,
       label: "Distinct strategies deployed",
     },
-  ] satisfies PlatformStat[],
+  ],
   footnote: "All statistics as of July 2026",
-} as const;
+  background: PLATFORM_SECTION_BACKGROUND,
+};
 
 export function formatPlatformStatValue(
   n: number,

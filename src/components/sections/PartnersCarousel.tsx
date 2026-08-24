@@ -1,14 +1,28 @@
-import { PARTNERS } from "./partners/partners.config";
+import Image from "next/image";
+
+import { PARTNERS, type PartnerView } from "./partners/partners.config";
 
 type PartnersCarouselProps = {
   className?: string;
+  partners?: PartnerView[];
 };
 
-const MARQUEE_PARTNERS = [...PARTNERS, ...PARTNERS];
+const FALLBACK: PartnerView[] = PARTNERS.map((p) => ({
+  id: p.id,
+  name: p.name,
+  image: null,
+  Logo: p.Logo,
+}));
 
 export default function PartnersCarousel({
   className = "",
+  partners = FALLBACK,
 }: PartnersCarouselProps) {
+  // Doubled inside the component now that the list is a prop. The exact 2x
+  // matters: the CSS marquee translates -50%, so any other multiple makes the
+  // loop visibly jump.
+  const marquee = [...partners, ...partners];
+
   return (
     <section
       id="partners"
@@ -34,8 +48,8 @@ export default function PartnersCarousel({
           className="partners-marquee-track flex w-max items-center gap-14 px-8 md:gap-20 md:px-12"
           role="list"
         >
-          {MARQUEE_PARTNERS.map((partner, index) => {
-            const { Logo } = partner;
+          {marquee.map((partner, index) => {
+            const { Logo, image } = partner;
             return (
               <li
                 key={`${partner.id}-${index}`}
@@ -43,7 +57,24 @@ export default function PartnersCarousel({
                 role="listitem"
                 aria-label={partner.name}
               >
-                <Logo className="h-7 w-auto text-black md:h-8" />
+                {image ? (
+                  <Image
+                    src={image.url}
+                    alt={partner.name}
+                    width={image.width}
+                    height={image.height}
+                    className="h-7 w-auto object-contain md:h-8"
+                    // Above the fold on most viewports, and the marquee has no
+                    // scroll trigger to lazily wait for.
+                    priority={index < partners.length}
+                    // Partner marks are commonly SVGs, and the CMS image route
+                    // has no file extension for next/image to detect that from
+                    // the URL alone.
+                    unoptimized={image.mime === "image/svg+xml"}
+                  />
+                ) : Logo ? (
+                  <Logo className="h-7 w-auto text-black md:h-8" />
+                ) : null}
               </li>
             );
           })}
