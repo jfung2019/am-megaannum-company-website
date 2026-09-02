@@ -5,6 +5,9 @@ services:
       dockerfile: Dockerfile
     container_name: company-website
     restart: unless-stopped
+    environment:
+      - CMS_API_BASE_URL=${CMS_API_BASE_URL:-http://localhost:8001/api/v1} 
+      - CMS_SITE_API_KEY=${CMS_SITE_API_KEY:-}
     networks:
       - portal_net
 
