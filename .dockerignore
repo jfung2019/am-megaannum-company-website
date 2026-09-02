@@ -5,5 +5,4 @@ node_modules
 *.md
 megaannum-company-website.code-workspace
 npm-debug.log*
-.env*
 README.md
