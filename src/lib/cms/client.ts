@@ -34,7 +34,7 @@ export async function getSiteContent(): Promise<unknown> {
     if (!res.ok) return null;
     const body: unknown = await res.json();
     return (body as { content?: unknown } | null)?.content ?? null;
-  } catch {
-    return null;
+  } catch (error) {
+    console.error("Failed to fetch site content", error);
   }
 }
