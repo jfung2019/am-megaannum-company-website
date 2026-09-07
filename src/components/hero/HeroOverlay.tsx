@@ -145,7 +145,8 @@ export default function HeroOverlay({
           </div>
           <div className="flex shrink-0 flex-wrap gap-4">
             <a
-              href="#platform"
+              href="https://clientportal.megaannum-am.com/"
+              target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-medium text-slate-950 transition hover:bg-sky-50"
             >
               Client portal
