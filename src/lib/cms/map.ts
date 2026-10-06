@@ -10,6 +10,7 @@
  * frontend/src/lib/cms/defaults.ts.
  */
 
+import { SILVERWATER_BRAND, SILVERWATER_TEMP } from "@/lib/temp-branding";
 import { HERO_CONTENT, type HeroContent } from "@/components/hero/hero.config";
 import {
   CONTACT_CONTENT,
@@ -105,8 +106,8 @@ export function heroContent(raw: unknown): HeroContent {
     }))
     .filter((l) => l.text);
   return {
-    logo: imageUrl(landing.logo),
-    brand: HERO_CONTENT.brand,
+    logo: SILVERWATER_TEMP ? { ...SILVERWATER_BRAND.heroLogo } : imageUrl(landing.logo),
+    brand: SILVERWATER_TEMP ? SILVERWATER_BRAND.name : HERO_CONTENT.brand,
     headingLines: lines?.length ? lines : HERO_CONTENT.headingLines,
     body: str(landing.lower, HERO_CONTENT.body),
     // Same media route as an image; only the url is of any use to a <video>.

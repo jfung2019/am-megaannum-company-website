@@ -24,7 +24,17 @@ export const HERO_CONTENT: HeroContent = {
     { text: "Financial", color: "#ec721a" },
     { text: "Intelligence", color: "#ffffff" },
   ],
-  body:
-    "We combine institutional trading experience, deep liquidity access, and advanced AI systems to identify opportunities across global markets.",
+  body: "We combine institutional trading experience, deep liquidity access, and advanced AI systems to identify opportunities across global markets.",
   videoUrl: "https://www.pexels.com/download/video/36435706/",
 };
+
+export type NavLink = { href: string; label: string };
+
+/** Section anchors for the mobile menu (the desktop nav lists the same ones). */
+export const NAV_LINKS: readonly NavLink[] = [
+  { href: "#home", label: "Home" },
+  { href: "#platform", label: "Investment Edge" },
+  { href: "#partners", label: "Partners" },
+  { href: "#team", label: "Our Team" },
+  { href: "#contact", label: "Contact" },
+];

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
+import { SILVERWATER_TEMP } from "@/lib/temp-branding";
 import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
 import { BOARD_CONTENT, type PeopleContent } from "./people/people.config";
 
@@ -44,24 +45,19 @@ export default function OurPeopleSection({
       const eyebrow = header.querySelector("[data-people-eyebrow]");
       const heading = header.querySelector("[data-people-heading]");
       const accentLine = header.querySelector("[data-people-line]");
-      const portfolioHeading = teams.querySelector(
-        "[data-portfolio-heading]",
-      );
+      const portfolioHeading = teams.querySelector("[data-portfolio-heading]");
       const cards = gsap.utils.toArray<HTMLElement>(
         "[data-person-card]",
         teams,
       );
 
       if (reducedMotion) {
-        gsap.set(
-          [eyebrow, heading, accentLine, portfolioHeading, ...cards],
-          {
-            clearProps: "all",
-            opacity: 1,
-            y: 0,
-            scaleX: 1,
-          },
-        );
+        gsap.set([eyebrow, heading, accentLine, portfolioHeading, ...cards], {
+          clearProps: "all",
+          opacity: 1,
+          y: 0,
+          scaleX: 1,
+        });
         return;
       }
 
@@ -137,14 +133,20 @@ export default function OurPeopleSection({
           gsap.to(card, { y: -10, duration: 0.65, ease: "power2.out" });
           gsap.to(image, { scale: 1.05, duration: 0.9, ease: "power2.out" });
           if (overlay) {
-            gsap.to(overlay, { opacity: 0.35, duration: 0.5 });
+            gsap.to(overlay, {
+              opacity: SILVERWATER_TEMP ? 0.65 : 0.35,
+              duration: 0.5,
+            });
           }
         };
         const onLeave = () => {
           gsap.to(card, { y: 0, duration: 0.65, ease: "power2.out" });
           gsap.to(image, { scale: 1, duration: 0.9, ease: "power2.out" });
           if (overlay) {
-            gsap.to(overlay, { opacity: 0.55, duration: 0.5 });
+            gsap.to(overlay, {
+              opacity: SILVERWATER_TEMP ? 0.85 : 0.55,
+              duration: 0.5,
+            });
           }
         };
 
@@ -174,7 +176,7 @@ export default function OurPeopleSection({
     <section
       ref={sectionRef}
       id="team"
-      className={`relative w-full overflow-hidden bg-[#0a0a0a] text-white ${className}`.trim()}
+      className={`relative w-full overflow-hidden ${SILVERWATER_TEMP ? "bg-[#071a33]" : "bg-[#0a0a0a]"} text-white ${className}`.trim()}
       aria-labelledby="our-people-heading"
     >
       <div
@@ -232,16 +234,23 @@ export default function OurPeopleSection({
                   )}
                   <div
                     data-person-overlay
-                    className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
+                    className={`pointer-events-none absolute inset-0 bg-linear-to-t ${
+                      SILVERWATER_TEMP
+                        ? "from-[#071a33] via-[#071a33]/30 to-transparent opacity-85"
+                        : "from-black/80 via-black/20 to-transparent opacity-55"
+                    }`}
                     aria-hidden
                   />
                   <div className="absolute inset-x-0 bottom-0 p-6 md:p-7">
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-[#ec721a] uppercase">
-                      {String(index + 1).padStart(2, "0")}
-                    </p>
+                    {/* Numbering hidden while SILVERWATER_TEMP is on. */}
+                    {!SILVERWATER_TEMP && (
+                      <p className="font-mono text-[10px] tracking-[0.2em] text-[#ec721a] uppercase">
+                        {String(index + 1).padStart(2, "0")}
+                      </p>
+                    )}
                     <h3
                       data-person-name
-                      className={`${playfair.className} mt-2 text-2xl font-medium tracking-tight md:text-[1.65rem]`}
+                      className={`${playfair.className} ${SILVERWATER_TEMP ? "" : "mt-2"} text-2xl font-medium tracking-tight md:text-[1.65rem]`}
                     >
                       {member.name}
                     </h3>
@@ -285,7 +294,11 @@ export default function OurPeopleSection({
                     )}
                     <div
                       data-person-overlay
-                      className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-55"
+                      className={`pointer-events-none absolute inset-0 bg-linear-to-t ${
+                        SILVERWATER_TEMP
+                          ? "from-[#071a33] via-[#071a33]/30 to-transparent opacity-85"
+                          : "from-black/80 via-black/20 to-transparent opacity-55"
+                      }`}
                       aria-hidden
                     />
                     <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
