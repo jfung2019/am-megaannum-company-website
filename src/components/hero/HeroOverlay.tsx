@@ -5,7 +5,13 @@ import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
-import { HERO_CONTENT, type HeroContent } from "./hero.config";
+import { SILVERWATER_TEMP } from "@/lib/temp-branding";
+import MobileNav from "./MobileNav";
+import { HERO_CONTENT, NAV_LINKS, type HeroContent } from "./hero.config";
+
+// TEMPORARY (2026-10-06, ~1 month): client portal links are shown muted and
+// not clickable while SILVERWATER_TEMP is on (src/lib/temp-branding.ts).
+const CLIENT_PORTAL_ENABLED = !SILVERWATER_TEMP;
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -67,31 +73,32 @@ export default function HeroOverlay({
     return () => ctx.revert();
   }, []);
 
+  // Rendered twice: in the header and in the mobile menu's top bar.
+  const logoMark = logo ? (
+    <Image
+      src={logo.url}
+      alt={brand}
+      width={logo.width}
+      height={logo.height}
+      className="h-7 w-auto object-contain md:h-8"
+      // The brand mark is the topmost thing on the page; lazy-loading it
+      // would flash an empty nav on first paint.
+      priority
+      // The CMS image route has no file extension for next/image to
+      // detect an SVG from the URL alone, so it has to be told.
+      unoptimized={logo.mime === "image/svg+xml"}
+    />
+  ) : (
+    <span className="text-lg font-bold text-[#ec721a] uppercase">{brand}</span>
+  );
+
   return (
     <header
       ref={rootRef}
       className={`pointer-events-none absolute inset-0 z-10 flex h-full flex-col ${className}`.trim()}
     >
       <nav className="pointer-events-auto flex cursor-pointer items-center justify-between px-6 py-6 md:px-10 md:py-8 lg:px-14 xl:px-20">
-        {logo ? (
-          <Image
-            src={logo.url}
-            alt={brand}
-            width={logo.width}
-            height={logo.height}
-            className="h-7 w-auto object-contain md:h-8"
-            // The brand mark is the topmost thing on the page; lazy-loading it
-            // would flash an empty nav on first paint.
-            priority
-            // The CMS image route has no file extension for next/image to
-            // detect an SVG from the URL alone, so it has to be told.
-            unoptimized={logo.mime === "image/svg+xml"}
-          />
-        ) : (
-          <span className="text-lg font-bold text-[#ec721a] uppercase">
-            {brand}
-          </span>
-        )}
+        {logoMark}
         <div className="hidden items-center gap-5 text-sm text-white/70 md:flex lg:gap-7">
           <a href="#home" className="transition-colors hover:text-white">
             Home
@@ -99,19 +106,43 @@ export default function HeroOverlay({
           <a href="#platform" className="transition-colors hover:text-white">
             Investment Edge
           </a>
-          <a href="#partners" className="transition-colors hover:text-white">
-            Partners
-          </a>
+          {!SILVERWATER_TEMP && (
+            <a href="#partners" className="transition-colors hover:text-white">
+              Partners
+            </a>
+          )}
           <a href="#team" className="transition-colors hover:text-white">
             Our Team
           </a>
           <a href="#contact" className="transition-colors hover:text-white">
             Contact
           </a>
-          <a href="#platform" className="transition-colors hover:text-white">
-            Client portal
-          </a>
+          {CLIENT_PORTAL_ENABLED ? (
+            <a href="#platform" className="transition-colors hover:text-white">
+              Client portal
+            </a>
+          ) : (
+            <span
+              aria-disabled="true"
+              className="cursor-not-allowed text-white/30"
+            >
+              Client portal
+            </span>
+          )}
         </div>
+        <MobileNav
+          links={
+            SILVERWATER_TEMP
+              ? NAV_LINKS.filter((l) => l.href !== "#partners")
+              : NAV_LINKS
+          }
+          logo={logoMark}
+          portal={{
+            href: "https://clientportal.megaannum-am.com/",
+            label: "Client portal",
+            enabled: CLIENT_PORTAL_ENABLED,
+          }}
+        />
       </nav>
 
       <div className="relative flex flex-1 flex-col px-6 pt-10 pb-48 md:px-10 md:pt-14 md:pb-56 lg:px-14 xl:px-20">
@@ -144,13 +175,23 @@ export default function HeroOverlay({
             <p>{body}</p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-4">
-            <a
-              href="https://clientportal.megaannum-am.com/"
-              target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-medium text-slate-950 transition hover:bg-sky-50"
-            >
-              Client portal
-            </a>
+            {CLIENT_PORTAL_ENABLED ? (
+              <a
+                href="https://clientportal.megaannum-am.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-white px-7 py-3.5 text-sm font-medium text-slate-950 transition hover:bg-sky-50"
+              >
+                Client portal
+              </a>
+            ) : (
+              <span
+                aria-disabled="true"
+                className="inline-flex cursor-not-allowed items-center justify-center rounded-full bg-white/20 px-7 py-3.5 text-sm font-medium text-white/40"
+              >
+                Client portal
+              </span>
+            )}
           </div>
         </div>
       </div>

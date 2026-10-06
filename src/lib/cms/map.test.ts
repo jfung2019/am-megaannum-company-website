@@ -1,4 +1,11 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
+
+// These tests cover the CMS mapping itself, so run them with the temporary
+// SilverWater branding override off.
+vi.mock("@/lib/temp-branding", async (orig) => ({
+  ...(await orig<typeof import("@/lib/temp-branding")>()),
+  SILVERWATER_TEMP: false,
+}));
 
 // imageUrl reads this at call time to build image URLs, so it must be set
 // before the assertions — not before the imports.

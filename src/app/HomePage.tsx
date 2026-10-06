@@ -4,6 +4,7 @@ import PartnersCarousel from "@/components/sections/PartnersCarousel";
 import PlatformSection from "@/components/sections/PlatformSection";
 import ContactSection from "@/components/sections/ContactSection";
 import OurPeopleSection from "@/components/sections/OurPeopleSection";
+import { SILVERWATER_TEMP } from "@/lib/temp-branding";
 import { getSiteContent } from "@/lib/cms/client";
 import {
   contactContent,
@@ -26,7 +27,9 @@ export default async function HomePage() {
       <HeroSection content={heroContent(cms)} />
       <PlatformSection content={platformContent(cms)} />
       <div data-page-continuation className="relative z-10">
-        <PartnersCarousel partners={partnerList(cms)} />
+        {/* Hidden while SILVERWATER_TEMP is on. The CMS cannot hide it: an empty
+            partner list falls back to the bundled partners. */}
+        {!SILVERWATER_TEMP && <PartnersCarousel partners={partnerList(cms)} />}
         <OurPeopleSection content={peopleContent(cms)} />
         <ContactSection content={contactContent(cms)} />
         <Footer />

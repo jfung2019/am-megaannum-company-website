@@ -4,16 +4,35 @@ import { useEffect, useRef } from "react";
 import { Playfair_Display } from "next/font/google";
 import gsap from "gsap";
 
-import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
 import {
-  CONTACT_CONTENT,
-  type ContactContent,
-} from "./contact/contact.config";
+  SILVERWATER_CONTACT_DETAILS,
+  SILVERWATER_TEMP,
+} from "@/lib/temp-branding";
+import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
+import { CONTACT_CONTENT, type ContactContent } from "./contact/contact.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
+
+function MailIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m4 7 8 6 8-6" />
+    </svg>
+  );
+}
 
 type ContactSectionProps = {
   content?: ContactContent;
@@ -70,19 +89,30 @@ export default function ContactSection({
     };
   }, []);
 
-  const { eyebrow, heading, subhead, details, form } = content;
+  const { eyebrow, heading, subhead, form } = content;
+  const details = SILVERWATER_TEMP
+    ? SILVERWATER_CONTACT_DETAILS
+    : content.details;
 
   return (
     <section
       ref={sectionRef}
       id="contact"
-      className={`w-full bg-[#f8f9fa] text-[#1c1c1c] ${className}`.trim()}
+      className={`w-full ${
+        SILVERWATER_TEMP
+          ? "bg-[#ec721a] text-white"
+          : "bg-[#f8f9fa] text-[#1c1c1c]"
+      } ${className}`.trim()}
       aria-labelledby="contact-heading"
     >
       <div className="w-full px-6 py-24 md:px-10 md:py-28 lg:px-14 lg:py-32 xl:px-20">
         <div className="mx-auto max-w-2xl">
           <div ref={contentRef} className="text-center opacity-0">
-            <p className="font-mono text-[11px] font-medium tracking-[0.22em] text-black/45 uppercase">
+            <p
+              className={`font-mono text-[11px] font-medium tracking-[0.22em] uppercase ${
+                SILVERWATER_TEMP ? "text-white/70" : "text-black/45"
+              }`}
+            >
               {eyebrow}
             </p>
             <h2
@@ -91,89 +121,124 @@ export default function ContactSection({
             >
               {heading}
             </h2>
-            <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-black/60 md:text-[1.05rem] md:leading-8">
+            <p
+              className={`mx-auto mt-5 max-w-lg text-base leading-relaxed md:text-[1.05rem] md:leading-8 ${
+                SILVERWATER_TEMP ? "text-white/80" : "text-black/60"
+              }`}
+            >
               {subhead}
             </p>
 
-            <ul className="mt-10 space-y-5 border-t border-black/10 pt-10">
-              {details.map((item) => (
-                <li key={item.label}>
-                  <p className="font-mono text-[10px] tracking-[0.18em] text-black/40 uppercase">
-                    {item.label}
-                  </p>
-                  {item.href ? (
-                    <a
-                      href={item.href}
-                      className="mt-1 inline-block text-base text-[#1c1c1c] underline-offset-4 transition hover:text-[#ec721a] hover:underline"
-                    >
-                      {item.value}
-                    </a>
-                  ) : (
-                    <p className="mt-1 text-base text-[#1c1c1c]">
-                      {item.value}
+            {SILVERWATER_TEMP ? (
+              <ul className="mt-10 flex flex-col items-center gap-5">
+                {details.map((item) => (
+                  <li key={item.label}>
+                    <p className="font-mono text-[10px] tracking-[0.18em] text-white/60 uppercase">
+                      {item.label}
                     </p>
-                  )}
-                </li>
-              ))}
-            </ul>
+                    {item.href ? (
+                      // The address stays out of the visible text (less
+                      // scrape-bait); the tooltip and aria-label still expose it.
+                      <a
+                        href={item.href}
+                        title={item.value}
+                        aria-label={`Email us at ${item.value}`}
+                        className="mt-1 inline-flex items-center gap-2.5 text-base text-white underline-offset-4 transition hover:underline hover:opacity-80"
+                      >
+                        <MailIcon className="h-5 w-5 shrink-0" />
+                        Email us
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-base text-white">{item.value}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="mt-10 space-y-5 border-t border-black/10 pt-10">
+                {details.map((item) => (
+                  <li key={item.label}>
+                    <p className="font-mono text-[10px] tracking-[0.18em] text-black/40 uppercase">
+                      {item.label}
+                    </p>
+                    {item.href ? (
+                      <a
+                        href={item.href}
+                        className="mt-1 inline-block text-base text-[#1c1c1c] underline-offset-4 transition hover:text-[#ec721a] hover:underline"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="mt-1 text-base text-[#1c1c1c]">
+                        {item.value}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-            <form
-              className="mt-12 space-y-5 text-left"
-              onSubmit={(e) => e.preventDefault()}
-              noValidate
-            >
-              <div className="grid gap-5 sm:grid-cols-2">
+            {/* Hidden while SILVERWATER_TEMP is on (the form was never wired
+                to a backend anyway: onSubmit just preventDefaults). */}
+            {!SILVERWATER_TEMP && (
+              <form
+                className="mt-12 space-y-5 text-left"
+                onSubmit={(e) => e.preventDefault()}
+                noValidate
+              >
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
+                      {form.nameLabel}
+                    </span>
+                    <input
+                      type="text"
+                      name="name"
+                      autoComplete="name"
+                      className="w-full border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
+                      {form.emailLabel}
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      className="w-full border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
+                    />
+                  </label>
+                </div>
                 <label className="block">
                   <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
-                    {form.nameLabel}
+                    {form.companyLabel}
                   </span>
                   <input
                     type="text"
-                    name="name"
-                    autoComplete="name"
+                    name="company"
+                    autoComplete="organization"
                     className="w-full border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
                   />
                 </label>
                 <label className="block">
                   <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
-                    {form.emailLabel}
+                    {form.messageLabel}
                   </span>
-                  <input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    className="w-full border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
+                  <textarea
+                    name="message"
+                    rows={4}
+                    className="w-full resize-y border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
                   />
                 </label>
-              </div>
-              <label className="block">
-                <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
-                  {form.companyLabel}
-                </span>
-                <input
-                  type="text"
-                  name="company"
-                  autoComplete="organization"
-                  className="w-full border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
-                />
-              </label>
-              <label className="block">
-                <span className="mb-2 block text-xs font-medium tracking-wide text-black/50 uppercase">
-                  {form.messageLabel}
-                </span>
-                <textarea
-                  name="message"
-                  rows={4}
-                  className="w-full resize-y border border-black/12 bg-white px-4 py-3 text-sm text-[#1c1c1c] outline-none transition focus:border-[#ec721a]/60 focus:ring-2 focus:ring-[#ec721a]/15"
-                />
-              </label>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center rounded-full bg-[#ec721a] px-8 py-3.5 text-sm font-medium text-white transition hover:bg-[#d66512] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ec721a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f9fa]"
-              >
-                {form.submitLabel}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-full bg-[#ec721a] px-8 py-3.5 text-sm font-medium text-white transition hover:bg-[#d66512] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ec721a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#f8f9fa]"
+                >
+                  {form.submitLabel}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </div>
