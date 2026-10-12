@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { SILVERWATER_TEMP } from "@/lib/temp-branding";
-import { FOOTER_CONTENT } from "./footer/footer.config";
+import { FOOTER_CONTENT } from "./footer.config";
 
 type FooterProps = {
   className?: string;
@@ -15,7 +15,7 @@ export default function Footer({ className = "" }: FooterProps) {
     <footer
       className={`w-full ${
         SILVERWATER_TEMP
-          ? "border-t-2 border-[#ec721a] bg-[#071a33] text-white"
+          ? "bg-[#071a33] text-white"
           : "border-t border-white/10 bg-[#0a0a0a] text-white"
       } ${className}`.trim()}
     >

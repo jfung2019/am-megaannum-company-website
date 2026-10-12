@@ -7,22 +7,22 @@ import gsap from "gsap";
 
 import { SILVERWATER_TEMP } from "@/lib/temp-branding";
 import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
-import { BOARD_CONTENT, type PeopleContent } from "./people/people.config";
+import { TEAM_CONTENT, type TeamContent } from "./team.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 
-type OurPeopleSectionProps = {
+type TeamSectionProps = {
   className?: string;
-  content?: PeopleContent;
+  content?: TeamContent;
 };
 
-export default function OurPeopleSection({
+export default function TeamSection({
   className = "",
-  content = BOARD_CONTENT,
-}: OurPeopleSectionProps) {
+  content = TEAM_CONTENT,
+}: TeamSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const teamsRef = useRef<HTMLDivElement>(null);
@@ -42,9 +42,9 @@ export default function OurPeopleSection({
     let introTl: gsap.core.Timeline | null = null;
 
     const ctx = gsap.context(() => {
-      const eyebrow = header.querySelector("[data-people-eyebrow]");
-      const heading = header.querySelector("[data-people-heading]");
-      const accentLine = header.querySelector("[data-people-line]");
+      const eyebrow = header.querySelector("[data-team-eyebrow]");
+      const heading = header.querySelector("[data-team-heading]");
+      const accentLine = header.querySelector("[data-team-line]");
       const portfolioHeading = teams.querySelector("[data-portfolio-heading]");
       const cards = gsap.utils.toArray<HTMLElement>(
         "[data-person-card]",
@@ -177,7 +177,7 @@ export default function OurPeopleSection({
       ref={sectionRef}
       id="team"
       className={`relative w-full overflow-hidden ${SILVERWATER_TEMP ? "bg-[#071a33]" : "bg-[#0a0a0a]"} text-white ${className}`.trim()}
-      aria-labelledby="our-people-heading"
+      aria-labelledby="team-heading"
     >
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-10%,rgba(236,114,26,0.14),transparent_55%)]"
@@ -191,20 +191,20 @@ export default function OurPeopleSection({
       <div className="relative w-full px-6 py-24 md:px-10 md:py-32 lg:px-14 lg:py-28 xl:px-20 xl:py-40">
         <header ref={headerRef} className="max-w-3xl">
           <p
-            data-people-eyebrow
+            data-team-eyebrow
             className="font-mono text-[11px] font-medium tracking-[0.28em] text-white/45 uppercase"
           >
             {eyebrow}
           </p>
           <h2
-            id="our-people-heading"
-            data-people-heading
+            id="team-heading"
+            data-team-heading
             className={`${playfair.className} mt-6 text-4xl leading-[1.08] font-medium tracking-tight md:text-5xl lg:text-[3.5rem] lg:leading-[1.06]`}
           >
             {heading}
           </h2>
           <div
-            data-people-line
+            data-team-line
             className="mt-10 h-px w-28 origin-left bg-linear-to-r from-[#ec721a] to-[#ec721a]/20"
             aria-hidden
           />

@@ -20,7 +20,7 @@ export type Partner = {
 /**
  * What the carousel actually renders. A CMS partner carries `image`; a bundled
  * fallback carries `Logo`, which is a component reference and so can never come
- * from JSON. PartnersCarousel is a server component, so holding one crosses no
+ * from JSON. PartnersSection is a server component, so holding one crosses no
  * client boundary.
  */
 export type PartnerView = {

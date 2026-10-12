@@ -22,10 +22,10 @@ import {
   type PartnerView,
 } from "@/components/sections/partners/partners.config";
 import {
-  BOARD_CONTENT,
-  type PeopleContent,
+  TEAM_CONTENT,
+  type TeamContent,
   type TeamMember,
-} from "@/components/sections/people/people.config";
+} from "@/components/sections/team/team.config";
 import {
   PLATFORM_CONTENT,
   type PlatformContent,
@@ -167,17 +167,17 @@ function member(m: Rec, index: number): TeamMember {
   };
 }
 
-export function peopleContent(raw: unknown): PeopleContent {
+export function teamContent(raw: unknown): TeamContent {
   const team = obj(obj(raw).team);
   const board = rows(team.board)?.map(member).filter((m) => m.name);
   const portfolio = rows(team.portfolio)?.map(member).filter((m) => m.name);
   return {
-    eyebrow: str(team.eyebrow, BOARD_CONTENT.eyebrow),
-    heading: str(team.heading, BOARD_CONTENT.heading),
-    members: board?.length ? board : BOARD_CONTENT.members,
+    eyebrow: str(team.eyebrow, TEAM_CONTENT.eyebrow),
+    heading: str(team.heading, TEAM_CONTENT.heading),
+    members: board?.length ? board : TEAM_CONTENT.members,
     portfolioTeam: {
-      heading: str(team.portfolioHeading, BOARD_CONTENT.portfolioTeam.heading),
-      members: portfolio?.length ? portfolio : BOARD_CONTENT.portfolioTeam.members,
+      heading: str(team.portfolioHeading, TEAM_CONTENT.portfolioTeam.heading),
+      members: portfolio?.length ? portfolio : TEAM_CONTENT.portfolioTeam.members,
     },
   };
 }

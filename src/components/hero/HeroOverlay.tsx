@@ -111,9 +111,11 @@ export default function HeroOverlay({
               Partners
             </a>
           )}
-          <a href="#team" className="transition-colors hover:text-white">
-            Our Team
-          </a>
+          {!SILVERWATER_TEMP && (
+            <a href="#team" className="transition-colors hover:text-white">
+              Our Team
+            </a>
+          )}
           <a href="#contact" className="transition-colors hover:text-white">
             Contact
           </a>
@@ -133,7 +135,9 @@ export default function HeroOverlay({
         <MobileNav
           links={
             SILVERWATER_TEMP
-              ? NAV_LINKS.filter((l) => l.href !== "#partners")
+              ? NAV_LINKS.filter(
+                  (l) => l.href !== "#partners" && l.href !== "#team",
+                )
               : NAV_LINKS
           }
           logo={logoMark}

@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import { PARTNERS, type PartnerView } from "./partners/partners.config";
+import { PARTNERS, type PartnerView } from "./partners.config";
 
-type PartnersCarouselProps = {
+type PartnersSectionProps = {
   className?: string;
   partners?: PartnerView[];
 };
@@ -14,10 +14,10 @@ const FALLBACK: PartnerView[] = PARTNERS.map((p) => ({
   Logo: p.Logo,
 }));
 
-export default function PartnersCarousel({
+export default function PartnersSection({
   className = "",
   partners = FALLBACK,
-}: PartnersCarouselProps) {
+}: PartnersSectionProps) {
   // Doubled inside the component now that the list is a prop. The exact 2x
   // matters: the CSS marquee translates -50%, so any other multiple makes the
   // loop visibly jump.

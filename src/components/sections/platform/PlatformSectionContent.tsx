@@ -9,7 +9,7 @@ import {
   formatPlatformStatValue,
   PLATFORM_CONTENT,
   type PlatformContent,
-} from "./platform/platform.config";
+} from "./platform.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
