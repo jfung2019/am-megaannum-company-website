@@ -60,7 +60,9 @@ export default function ContactSection({
 
     const ctx = gsap.context(() => {
       if (reducedMotion) {
-        gsap.set(content, { clearProps: "all", opacity: 1, y: 0 });
+        // No clearProps: it would drop the inline opacity and the element would
+        // fall back to its opacity-0 class.
+        gsap.set(content, { opacity: 1, y: 0 });
         return;
       }
 

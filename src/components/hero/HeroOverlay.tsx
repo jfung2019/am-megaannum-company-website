@@ -44,7 +44,9 @@ export default function HeroOverlay({
 
     const ctx = gsap.context(() => {
       if (reducedMotion) {
-        gsap.set([...headingLines, panel], { clearProps: "all", opacity: 1 });
+        // No clearProps: it would drop the inline opacity and the elements would
+        // fall back to their opacity-0 class.
+        gsap.set([...headingLines, panel], { opacity: 1, y: 0 });
         return;
       }
 
