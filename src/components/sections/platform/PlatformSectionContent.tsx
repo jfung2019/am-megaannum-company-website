@@ -122,7 +122,7 @@ export default function PlatformSectionContent({
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="pt-8 md:pt-10"
+              className="pt-8 text-center md:pt-10"
             >
               <dt className="sr-only">{stat.label}</dt>
               <dd
