@@ -14,14 +14,14 @@ const BASE = "http://cms.test/api/v1";
 import { HERO_CONTENT } from "@/components/hero/hero.config";
 import { CONTACT_CONTENT } from "@/components/sections/contact/contact.config";
 import { PARTNERS } from "@/components/sections/partners/partners.config";
-import { BOARD_CONTENT } from "@/components/sections/people/people.config";
+import { TEAM_CONTENT } from "@/components/sections/team/team.config";
 import { PLATFORM_CONTENT } from "@/components/sections/platform/platform.config";
 import {
   contactContent,
   heroContent,
   parseStat,
   partnerList,
-  peopleContent,
+  teamContent,
   platformContent,
 } from "@/lib/cms/map";
 
@@ -135,10 +135,10 @@ describe("mapping a published payload", () => {
       },
     ]);
 
-    const people = peopleContent(raw);
-    expect(people.eyebrow).toBe("CMS eyebrow");
-    expect(people.portfolioTeam.heading).toBe("CMS portfolio");
-    expect(people.members).toEqual([
+    const team = teamContent(raw);
+    expect(team.eyebrow).toBe("CMS eyebrow");
+    expect(team.portfolioTeam.heading).toBe("CMS portfolio");
+    expect(team.members).toEqual([
       {
         id: "m1",
         name: "Miriam",
@@ -170,7 +170,7 @@ describe("falling back to the bundled configs", () => {
   ])("yields the defaults for %s", (_name, raw) => {
     expect(heroContent(raw)).toEqual(HERO_CONTENT);
     expect(platformContent(raw)).toEqual(PLATFORM_CONTENT);
-    expect(peopleContent(raw)).toEqual(BOARD_CONTENT);
+    expect(teamContent(raw)).toEqual(TEAM_CONTENT);
     expect(contactContent(raw)).toEqual(CONTACT_CONTENT);
     expect(partnerList(raw).map((p) => p.name)).toEqual(PARTNERS.map((p) => p.name));
   });
@@ -198,9 +198,9 @@ describe("falling back to the bundled configs", () => {
     expect(platformContent(raw).headline).toBe(PLATFORM_CONTENT.headline);
 
     const team = { ...payload().team, eyebrow: "", portfolioHeading: "" };
-    expect(peopleContent({ team }).eyebrow).toBe(BOARD_CONTENT.eyebrow);
-    expect(peopleContent({ team }).portfolioTeam.heading).toBe(
-      BOARD_CONTENT.portfolioTeam.heading,
+    expect(teamContent({ team }).eyebrow).toBe(TEAM_CONTENT.eyebrow);
+    expect(teamContent({ team }).portfolioTeam.heading).toBe(
+      TEAM_CONTENT.portfolioTeam.heading,
     );
   });
 
@@ -219,7 +219,7 @@ describe("falling back to the bundled configs", () => {
 
   it("keeps a member whose photo is missing, with an empty image for the placeholder", () => {
     const team = { board: [{ id: "m1", name: "Miriam", title: "Chair", photo: null }] };
-    expect(peopleContent({ team }).members).toEqual([
+    expect(teamContent({ team }).members).toEqual([
       {
         id: "m1",
         name: "Miriam",

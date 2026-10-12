@@ -2,7 +2,7 @@ import PlatformSectionContent from "./PlatformSectionContent";
 import {
   PLATFORM_CONTENT,
   type PlatformContent,
-} from "./platform/platform.config";
+} from "./platform.config";
 
 type PlatformSectionProps = {
   className?: string;

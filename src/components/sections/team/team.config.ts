@@ -9,7 +9,7 @@ export type TeamMember = {
   imageAlt: string;
 };
 
-export type PeopleContent = {
+export type TeamContent = {
   eyebrow: string;
   heading: string;
   members: TeamMember[];
@@ -19,8 +19,8 @@ export type PeopleContent = {
   };
 };
 
-export const BOARD_CONTENT: PeopleContent = {
-  eyebrow: "Board of Directors",
+export const TEAM_CONTENT: TeamContent = {
+  eyebrow: "Team",
   heading: "They make it possible",
   members: [
     {

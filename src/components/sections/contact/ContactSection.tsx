@@ -9,7 +9,7 @@ import {
   SILVERWATER_TEMP,
 } from "@/lib/temp-branding";
 import { revealOnScroll } from "@/lib/gsap/revealOnScroll";
-import { CONTACT_CONTENT, type ContactContent } from "./contact/contact.config";
+import { CONTACT_CONTENT, type ContactContent } from "./contact.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -100,7 +100,7 @@ export default function ContactSection({
       id="contact"
       className={`w-full ${
         SILVERWATER_TEMP
-          ? "bg-[#ec721a] text-white"
+          ? "bg-white text-[#1c1c1c]"
           : "bg-[#f8f9fa] text-[#1c1c1c]"
       } ${className}`.trim()}
       aria-labelledby="contact-heading"
@@ -110,7 +110,7 @@ export default function ContactSection({
           <div ref={contentRef} className="text-center opacity-0">
             <p
               className={`font-mono text-[11px] font-medium tracking-[0.22em] uppercase ${
-                SILVERWATER_TEMP ? "text-white/70" : "text-black/45"
+                SILVERWATER_TEMP ? "text-black/50" : "text-black/45"
               }`}
             >
               {eyebrow}
@@ -123,7 +123,7 @@ export default function ContactSection({
             </h2>
             <p
               className={`mx-auto mt-5 max-w-lg text-base leading-relaxed md:text-[1.05rem] md:leading-8 ${
-                SILVERWATER_TEMP ? "text-white/80" : "text-black/60"
+                SILVERWATER_TEMP ? "text-black/60" : "text-black/60"
               }`}
             >
               {subhead}
@@ -133,7 +133,7 @@ export default function ContactSection({
               <ul className="mt-10 flex flex-col items-center gap-5">
                 {details.map((item) => (
                   <li key={item.label}>
-                    <p className="font-mono text-[10px] tracking-[0.18em] text-white/60 uppercase">
+                    <p className="font-mono text-[10px] tracking-[0.18em] text-black/40 uppercase">
                       {item.label}
                     </p>
                     {item.href ? (
@@ -143,13 +143,13 @@ export default function ContactSection({
                         href={item.href}
                         title={item.value}
                         aria-label={`Email us at ${item.value}`}
-                        className="mt-1 inline-flex items-center gap-2.5 text-base text-white underline-offset-4 transition hover:underline hover:opacity-80"
+                        className="mt-1 inline-flex items-center gap-2.5 text-base text-[#1c1c1c] underline-offset-4 transition hover:underline hover:opacity-80"
                       >
                         <MailIcon className="h-5 w-5 shrink-0" />
                         Email us
                       </a>
                     ) : (
-                      <p className="mt-1 text-base text-white">{item.value}</p>
+                      <p className="mt-1 text-base text-[#1c1c1c]">{item.value}</p>
                     )}
                   </li>
                 ))}
