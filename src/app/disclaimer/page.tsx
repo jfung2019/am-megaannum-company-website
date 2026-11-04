@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { Playfair_Display } from "next/font/google";
 
 import Footer from "@/components/footer/Footer";
 import { DISCLAIMER_CONTENT } from "@/components/disclaimer/disclaimer.config";
-import {
-  SILVERWATER_BRAND,
-  SILVERWATER_TEMP,
-} from "@/lib/temp-branding";
+import { FOOTER_CONTENT } from "@/components/footer/footer.config";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -16,15 +12,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: `${DISCLAIMER_CONTENT.title} | ${SILVERWATER_BRAND.name}`,
+  title: `${DISCLAIMER_CONTENT.title} | ${FOOTER_CONTENT.brand}`,
   description:
     "Important information about the use of this website and the risks of investing.",
 };
 
 export default function DisclaimerPage() {
-  // The wording names Silverwater, so it must not show under Megaannum branding.
-  if (!SILVERWATER_TEMP) notFound();
-
   const { title, paragraphs } = DISCLAIMER_CONTENT;
 
   return (

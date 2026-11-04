@@ -53,16 +53,14 @@ export default function Footer({ className = "" }: FooterProps) {
           >
             © {year} {copyrightOwner}
           </p>
-          {/* The disclaimer wording names SilverWater, so it only shows with
-              the temporary branding. */}
-          {SILVERWATER_TEMP && (
-            <Link
-              href="/disclaimer"
-              className="font-mono text-[10px] tracking-[0.14em] text-white/60 uppercase underline-offset-4 transition hover:text-white hover:underline"
-            >
-              {DISCLAIMER_CONTENT.footerLinkLabel}
-            </Link>
-          )}
+          <Link
+            href="/disclaimer"
+            className={`font-mono text-[10px] tracking-[0.14em] uppercase underline-offset-4 transition hover:text-white hover:underline ${
+              SILVERWATER_TEMP ? "text-white/60" : "text-white/40"
+            }`}
+          >
+            {DISCLAIMER_CONTENT.footerLinkLabel}
+          </Link>
         </div>
       </div>
     </footer>
